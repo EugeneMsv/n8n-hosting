@@ -1,0 +1,14 @@
+-- N8N_EXECUTION Database Schema
+-- This script creates the tables for the n8n_execution database
+--
+-- NOTE: This script is executed with superuser privileges during database initialization
+-- The POSTGRES_N8N_EXECUTION_USER will only have DML rights (SELECT, INSERT, UPDATE, DELETE)
+-- and will NOT be able to modify the schema after creation.
+
+-- TODO: Add your table creation statements below
+-- Example:
+-- CREATE TABLE IF NOT EXISTS example_table (
+--     id SERIAL PRIMARY KEY,
+--     name VARCHAR(255) NOT NULL,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );

@@ -1,0 +1,7 @@
+tunnel: cf1dce17-3a96-4626-9a40-9a607e004fe5
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: n8n.emoiseev.work
+    service: http://n8n:5678
+  - service: http_status:404
