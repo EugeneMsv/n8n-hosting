@@ -1,0 +1,551 @@
+{
+  "createdAt": "2025-09-28T21:29:04.986Z",
+  "updatedAt": "2025-10-04T05:03:07.263Z",
+  "id": "T6qKwGk8M2wBxWrS",
+  "name": "LLM: text prompt handle",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.ai_agent.provider}}",
+                    "rightValue": "Anthropic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "184646b6-3456-4898-9aa2-efcc9d48de1e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "8f7bedbf-8451-4a3c-b446-9fee422ce2f4",
+                    "leftValue": "={{$json.ai_agent.provider}}",
+                    "rightValue": "=Google",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "0b0da603-63fe-41b6-a8f5-00d5fb268279",
+                    "leftValue": "={{$json.ai_agent.provider}}",
+                    "rightValue": "Perplexity",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "1fe14bd4-c4e3-40ab-9c8f-8a3bec379710",
+      "name": "LLM Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        0,
+        -736
+      ]
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "ai_agent",
+              "type": "object"
+            },
+            {
+              "name": "prompt"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -592,
+        -416
+      ],
+      "id": "b325393d-ccfc-4c9a-8d1f-ed488c345606",
+      "name": "When Executed by Another Workflow",
+      "retryOnFail": true,
+      "notesInFlow": false,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "errorType": "errorObject",
+        "errorObject": "= {\n\"type\":\"error\",\n\"content\":\"{{$json.error}}\"\n}"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        -32
+      ],
+      "id": "83e91bd4-6621-4234-8735-68c4a4cb6542",
+      "name": "Stop and Error",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "={{ $json.ai_agent.llm }}",
+          "mode": "id"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -800
+      ],
+      "id": "3ff98360-41ce-48d8-b02c-11c5c6d30fcd",
+      "name": "Message a model",
+      "retryOnFail": true,
+      "executeOnce": false,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rkVlLAzFlUDQXSQe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "={{ $json.ai_agent.llm }}",
+          "mode": "id"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -1040
+      ],
+      "id": "caeae6f7-f662-4d42-ba84-c59d7646ae7e",
+      "name": "Message a model1",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "anthropicApi": {
+          "id": "kqg6kHOMmE7OKXB5",
+          "name": "Anthropic account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": "={{ $json.ai_agent.llm}}",
+        "messages": {
+          "message": [
+            {
+              "content": "={{$json.prompt}}"
+            }
+          ]
+        },
+        "simplify": true,
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -544
+      ],
+      "id": "1e52c473-1b65-4e04-af25-32a14042013c",
+      "name": "Message a model2",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "perplexityApi": {
+          "id": "uDvFTKBfWrs2w3TQ",
+          "name": "Perplexity account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "prompt_response",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5bdda459-0bfc-45e0-8e96-f7a966bd7ec4",
+      "name": "Convert Google Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        -816
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "prompt_response",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "093337c9-e36c-4461-914d-4a4db14999dc",
+      "name": "Convert Perplexity Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        -560
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "prompt_response",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "38a30726-c84f-40b6-9b59-794fae52df64",
+      "name": "Convert Anthropic Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        -1056
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "connections": {
+    "LLM Router": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "LLM Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Convert Google Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model2": {
+      "main": [
+        [
+          {
+            "node": "Convert Perplexity Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Google Response": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Perplexity Response": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Convert Anthropic Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Anthropic Response": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Los_Angeles",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "ai_agent": {
+            "provider": "Google",
+            "llm": "models/gemini-2.5-flash"
+          },
+          "prompt": "what's the biggest city in the world?"
+        }
+      }
+    ]
+  },
+  "versionId": "9f4a3a07-2a63-4082-9130-1703154380af",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-09-28T21:29:04.986Z",
+      "updatedAt": "2025-09-28T21:29:04.986Z",
+      "role": "workflow:owner",
+      "workflowId": "T6qKwGk8M2wBxWrS",
+      "projectId": "6FOle8VEKAMnu05Z",
+      "project": {
+        "createdAt": "2025-09-24T03:24:51.385Z",
+        "updatedAt": "2025-09-24T03:25:40.622Z",
+        "id": "6FOle8VEKAMnu05Z",
+        "name": "Evgenii Moiseev <jedrus00@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-24T03:24:51.385Z",
+            "updatedAt": "2025-09-24T03:24:51.385Z",
+            "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+            "projectId": "6FOle8VEKAMnu05Z",
+            "user": {
+              "createdAt": "2025-09-24T03:24:50.933Z",
+              "updatedAt": "2025-10-05T20:26:56.268Z",
+              "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+              "email": "jedrus00@gmail.com",
+              "firstName": "Evgenii",
+              "lastName": "Moiseev",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-24T03:25:56.788Z",
+                "personalization_survey_n8n_version": "1.112.4",
+                "companyType": "personal",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XGZy1JaF06FfcLVB",
+                "userActivatedAt": 1759095566821,
+                "dismissedCallouts": {
+                  "preBuiltAgentsModalCallout": true
+                },
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1759366397954
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-09-28T21:29:00.851Z",
+      "updatedAt": "2025-09-28T21:29:00.851Z",
+      "id": "veJM4joaFd2Wd7Rp",
+      "name": "LLM"
+    },
+    {
+      "createdAt": "2025-09-28T21:30:10.997Z",
+      "updatedAt": "2025-09-28T21:30:10.997Z",
+      "id": "Hk3xcD25h6h2plM2",
+      "name": "sub-workflow"
+    }
+  ]
+}

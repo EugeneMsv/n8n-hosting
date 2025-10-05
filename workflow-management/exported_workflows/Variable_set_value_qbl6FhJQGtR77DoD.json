@@ -1,0 +1,313 @@
+{
+  "createdAt": "2025-10-02T02:25:30.762Z",
+  "updatedAt": "2025-10-04T05:04:37.766Z",
+  "id": "qbl6FhJQGtR77DoD",
+  "name": "Variable: set value",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "workflow_id"
+            },
+            {
+              "name": "scope"
+            },
+            {
+              "name": "variable_name"
+            },
+            {
+              "name": "value"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b94d8f0f-6145-4b4a-a534-8dd972bca937",
+      "name": "Input",
+      "retryOnFail": true,
+      "notesInFlow": false,
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_variables",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_id": "={{ $('Input').item.json.workflow_id }}",
+            "scope": "={{ $('Input').item.json.scope }}",
+            "variable_name": "={{ $('Input').item.json.variable_name }}",
+            "value": "={{ $('Input').item.json.value }}"
+          },
+          "matchingColumns": [
+            "workflow_id",
+            "scope",
+            "variable_name"
+          ],
+          "schema": [
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scope",
+              "displayName": "scope",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "variable_name",
+              "displayName": "variable_name",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "value",
+              "displayName": "value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "connectionTimeout": 60
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        688,
+        0
+      ],
+      "id": "c472d906-f1b9-4ec6-b6be-f2fba76fc9e9",
+      "name": "Upsert Variable",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "xEXTfV2NuJVM5TLV",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"value\": {{ $('Input').item.json.value }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        0
+      ],
+      "id": "86704152-70d6-4fc8-9772-97ed12e79d33",
+      "name": "Return Success",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "errorType": "errorObject",
+        "errorObject": "={\n  \"type\": \"error\",\n  \"content\": \"{{ $json.error }}\"\n}"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        272
+      ],
+      "id": "902f6749-d202-4261-92aa-cb1673fc6a4b",
+      "name": "Stop and Error",
+      "notesInFlow": false
+    }
+  ],
+  "connections": {
+    "Input": {
+      "main": [
+        [
+          {
+            "node": "Upsert Variable",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Variable": {
+      "main": [
+        [
+          {
+            "node": "Return Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return Success": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Input": [
+      {
+        "json": {
+          "workflow_id": "e20c5162-0cfb-4fb5-bae6-5bc48e799791",
+          "scope": "42137356",
+          "variable_name": "transcriber",
+          "value": "{\"provider\": \"OpenAI\", \"llm\": \"gpt-4o\"}"
+        }
+      }
+    ]
+  },
+  "versionId": "9eda2577-d0f6-4dae-a93f-969d47914dcb",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-02T02:25:30.762Z",
+      "updatedAt": "2025-10-02T02:25:30.762Z",
+      "role": "workflow:owner",
+      "workflowId": "qbl6FhJQGtR77DoD",
+      "projectId": "6FOle8VEKAMnu05Z",
+      "project": {
+        "createdAt": "2025-09-24T03:24:51.385Z",
+        "updatedAt": "2025-09-24T03:25:40.622Z",
+        "id": "6FOle8VEKAMnu05Z",
+        "name": "Evgenii Moiseev <jedrus00@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-24T03:24:51.385Z",
+            "updatedAt": "2025-09-24T03:24:51.385Z",
+            "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+            "projectId": "6FOle8VEKAMnu05Z",
+            "user": {
+              "createdAt": "2025-09-24T03:24:50.933Z",
+              "updatedAt": "2025-10-05T20:26:56.268Z",
+              "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+              "email": "jedrus00@gmail.com",
+              "firstName": "Evgenii",
+              "lastName": "Moiseev",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-24T03:25:56.788Z",
+                "personalization_survey_n8n_version": "1.112.4",
+                "companyType": "personal",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XGZy1JaF06FfcLVB",
+                "userActivatedAt": 1759095566821,
+                "dismissedCallouts": {
+                  "preBuiltAgentsModalCallout": true
+                },
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1759366397954
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-09-28T21:30:10.997Z",
+      "updatedAt": "2025-09-28T21:30:10.997Z",
+      "id": "Hk3xcD25h6h2plM2",
+      "name": "sub-workflow"
+    },
+    {
+      "createdAt": "2025-10-04T05:04:29.063Z",
+      "updatedAt": "2025-10-04T05:04:29.063Z",
+      "id": "rdSp9czUdPFSGmue",
+      "name": "variable"
+    }
+  ]
+}
