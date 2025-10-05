@@ -1,0 +1,1253 @@
+{
+  "createdAt": "2025-10-05T22:42:51.997Z",
+  "updatedAt": "2025-10-05T22:50:13.515Z",
+  "id": "ZGNsRjcEZ1EIrnoC",
+  "name": "Telegram AI Assistant: message handle v2",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "text": "={{ $json.prompt_response.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&') }}",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1808,
+        464
+      ],
+      "id": "0518dca6-5623-4def-a2ef-35e1cde8c0e1",
+      "name": "Reply in Telegram",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Context').item.json.voice_file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        96
+      ],
+      "id": "69f09c62-e4aa-48b0-8666-988f2858e7fa",
+      "name": "Get a file",
+      "webhookId": "e0769871-efe3-49da-81a5-2f88a6fdd33f",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {
+          "download": false
+        }
+      },
+      "id": "7f033b50-6dea-423e-bf7c-ec94b4c96b4c",
+      "name": "On telegram message",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -896,
+        352
+      ],
+      "webhookId": "55acc711-c248-4ac9-b6cd-e295c2d33f4b",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"workflow_id\": \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n  \"user_id\": \"{{ $json.message?.from?.id || $json.callback_query?.from?.id }}\",\n  \"chat_id\": \"{{ $json.message?.chat?.id || $json.callback_query?.message?.chat?.id }}\",\n  \"message_id\": \"{{ $json.message?.message_id || $json.callback_query?.message?.message_id }}\",\n  \"message_text\": \"{{ $json.message?.text }}\",\n  \"message_type\": \"{{ $json.message?.voice ? 'voice' : ($json.message?.text ?\n  'text' : ($json.callback_query ? 'callback' : 'unknown')) }}\",\n  \"voice_file_id\": \"{{ $json.message?.voice?.file_id }}\",\n  \"callback_query_id\": \"{{ $json.callback_query?.id }}\",\n  \"callback_query_data\": \"{{ $json.callback_query?.data }}\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -672,
+        352
+      ],
+      "id": "130b543f-ebf9-4c8a-b817-cb333148f234",
+      "name": "Context"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "DpbMEfVtwhwDVU9d",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/DpbMEfVtwhwDVU9d",
+          "cachedResultName": "Variable: get or set default"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_id": "={{ $('Context').item.json.workflow_id }}",
+            "scope": "={{ $('Context').item.json.user_id }}",
+            "variable_name": "transcriber",
+            "default_value": "={\"provider\": \"Google\", \"llm\": \"models/gemini-2.5-flash\"}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "scope",
+              "displayName": "scope",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "variable_name",
+              "displayName": "variable_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "default_value",
+              "displayName": "default_value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        208
+      ],
+      "id": "020a5d64-6493-4123-9a32-1a42dad6f8b4",
+      "name": "Get or set transcriber variable",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "DpbMEfVtwhwDVU9d",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/DpbMEfVtwhwDVU9d",
+          "cachedResultName": "Variable: get or set default"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_id": "={{ $('Context').item.json.workflow_id }}",
+            "scope": "={{ $('Context').item.json.user_id }}",
+            "variable_name": "responder",
+            "default_value": "={\"provider\": \"Google\", \"llm\": \"models/gemini-2.5-flash\"}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "scope",
+              "displayName": "scope",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "variable_name",
+              "displayName": "variable_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "default_value",
+              "displayName": "default_value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1248,
+        448
+      ],
+      "id": "ea4fb707-d3dd-4f61-be30-a1d9f3b7288c",
+      "name": "Get or set responder variable",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "eee4MePNfl1ljaBP",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/eee4MePNfl1ljaBP",
+          "cachedResultName": "LLM: audio transcription handle"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ai_agent": "={{ $('Get or set transcriber variable').item.json.value }}"
+          },
+          "matchingColumns": [
+            "ai_agent"
+          ],
+          "schema": [
+            {
+              "id": "ai_agent",
+              "displayName": "ai_agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        736,
+        80
+      ],
+      "id": "586888a3-292c-4f04-94de-936a35e5f98f",
+      "name": "Audio Transcription LLM Router",
+      "retryOnFail": false,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "T6qKwGk8M2wBxWrS",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/T6qKwGk8M2wBxWrS",
+          "cachedResultName": "LLM: text prompt handle"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ai_agent": "={{ $('Get or set responder variable').item.json.value }}",
+            "prompt": "=You are an AI assistant bot in Telegram. Answer to this prompt: \"{{ $('Set prompt').item.json.prompt }}\". Make sure your answer is consie enough."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ai_agent",
+              "displayName": "ai_agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "prompt",
+              "displayName": "prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1552,
+        464
+      ],
+      "id": "5947d0a5-e3b7-4b58-bf27-9e57c115dd1b",
+      "name": "Message handle LLM Router",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "text": "=Failed to respond. Error: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&')  }}\"",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1920,
+        192
+      ],
+      "id": "d7d5e4aa-4b00-4fb6-807d-41c1585a2b04",
+      "name": "Reply Error in Telegram",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1b366dd7-2dc4-4ec1-8e28-06b3d240c133"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "82592072-c943-49e4-b194-e074297c931e",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b85d0acb-cc40-43c0-84a6-5a23c78710b3",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "=callback",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "callback"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true,
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -352,
+        336
+      ],
+      "id": "3130d768-35bf-4f38-88b1-48fbc2cc1c42",
+      "name": "Switch",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"prompt\": \"{{ $('Audio Transcription LLM Router').isExecuted ? $('Audio Transcription LLM Router').item.json.transcript :  $('Context').item.json.message_text  }}\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        448
+      ],
+      "id": "22484dd9-38a9-4542-a06b-bfafb7a6d194",
+      "name": "Set prompt"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "is-command",
+              "leftValue": "={{  $('Context').item.json.message_text }}",
+              "rightValue": "/change_transcriber",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        896
+      ],
+      "id": "a4b3d258-d1c8-4b7e-86c8-4897729a19d9",
+      "name": "Is Change Transcriber Command"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "is-callback",
+              "leftValue": "={{  $('Context').item.json.callback_query_data }}",
+              "rightValue": "transcriber:",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        1136
+      ],
+      "id": "84d420b1-b60f-4c20-b610-18635efa1531",
+      "name": "Is Transcriber Callback"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "DpbMEfVtwhwDVU9d",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/DpbMEfVtwhwDVU9d",
+          "cachedResultName": "Variable: get or set default"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_id": "={{ $('Context').item.json.workflow_id }}",
+            "scope": "={{ $('Context').item.json.user_id }}",
+            "variable_name": "transcriber",
+            "default_value": "={\"provider\": \"Google\", \"llm\": \"models/gemini-2.5-flash\"}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "scope",
+              "displayName": "scope",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "variable_name",
+              "displayName": "variable_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "default_value",
+              "displayName": "default_value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        896
+      ],
+      "id": "ad11c914-eb97-441f-a9fa-e5fac9d0feeb",
+      "name": "Get Current Transcriber",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const callbackData = $('Context').item.json.callback_query_data;\nconst parts = callbackData.split(':');\n\nif (parts.length === 3 && parts[0] === 'transcriber') {\n  const provider = parts[1];\n  const llm = parts[2];\n  \n  const contextData = $('Context').item.json;\n  \n  return {\n    json: {\n      ...contextData,\n      new_agent: {\n        provider: provider,\n        llm: llm\n      },\n      new_agent_json: JSON.stringify({provider: provider, llm: llm})\n    }\n  };\n}\n\nthrow new Error('Invalid callback data format');"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        1136
+      ],
+      "id": "f66fb64e-9a39-491c-98bb-03bfda2925c6",
+      "name": "Parse Selection",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "qbl6FhJQGtR77DoD",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/qbl6FhJQGtR77DoD",
+          "cachedResultName": "Variable: set value"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "value": "={{ $json.new_agent_json }}",
+            "variable_name": "transcriber",
+            "scope": "={{ $json.user_id}}",
+            "workflow_id": "={{ $json.workflow_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "scope",
+              "displayName": "scope",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "variable_name",
+              "displayName": "variable_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "value",
+              "displayName": "value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        976,
+        1136
+      ],
+      "id": "1c93e8e5-d445-418d-9067-56c964d66dba",
+      "name": "Set New Transcriber",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agentMap = {\n  \"Google:models/gemini-2.5-flash\": \"Google Gemini 2.5 Flash\",\n  \"Google:models/gemini-2.0-flash-exp\": \"Google Gemini 2.0 Flash (Experimental)\",\n  \"OpenAI:gpt-4o\": \"OpenAI GPT-4o\",\n  \"OpenAI:gpt-4o-mini\": \"OpenAI GPT-4o Mini\"\n};\n\nconst newAgent = $('Parse Selection').item.json.new_agent;\nconst key = `${newAgent.provider}:${newAgent.llm}`;\nconst displayName = agentMap[key] || `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Transcriber changed to: *${displayName}*`\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        1136
+      ],
+      "id": "c1213c05-d2cf-4bb4-ba61-6c8c4e4d2dcb",
+      "name": "Prepare Confirmation",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $json.callback_query_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1616,
+        1136
+      ],
+      "id": "8cd4083b-4559-4eef-9baf-98fbd1f39560",
+      "name": "Answer Callback Query",
+      "webhookId": "answer-callback-webhook",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $json.chat_id }}",
+        "messageId": "={{ $json.message_id }}",
+        "text": "={{ $json.success_message }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1680,
+        1296
+      ],
+      "id": "ec891233-924f-47a6-9e36-c2df65e99e87",
+      "name": "Update Message",
+      "webhookId": "edit-message-webhook",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "text": "=❌ Error: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&') }}",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        1424
+      ],
+      "id": "24cff44b-6611-4b00-a82e-f296375c1c00",
+      "name": "Send Error Message",
+      "webhookId": "error-webhook",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const availableAgents = [\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-flash\",\n    displayName: \"Google Gemini 2.5 Flash\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.0-flash-exp\",\n    displayName: \"Google Gemini 2.0 Flash (Experimental)\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"OpenAI\",\n    llm: \"gpt-4o\",\n    displayName: \"OpenAI GPT-4o\",\n    emoji: \"🟢\"\n  },\n  {\n    provider: \"OpenAI\",\n    llm: \"gpt-4o-mini\",\n    displayName: \"OpenAI GPT-4o Mini\",\n    emoji: \"🟢\"\n  }\n];\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `transcriber:${agent.provider}:${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Transcriber:</b> ${currentAgentDisplay}\\n\\nSelect a new transcriber:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        896
+      ],
+      "id": "8de31ff4-df6b-4c9a-81a9-a45b6aeeca72",
+      "name": "Prepare Agent Menu",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "sendBody": true,
+        "contentType": "=json",
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify($json.request_body) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1296,
+        896
+      ],
+      "id": "6b5183e8-2631-42fc-9fb1-41c102668330",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "text": "=This operation is not yet supported",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        624
+      ],
+      "id": "629b2e79-2795-4aba-917a-d1c34b8931f8",
+      "name": "Reply Error in Telegram1",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "text": "=Thinking, please wait ",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0059d0fb-a4c5-4b8e-8464-2fe7e5516ecc",
+      "name": "Reply in Telegram1",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "connections": {
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Audio Transcription LLM Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On telegram message": {
+      "main": [
+        [
+          {
+            "node": "Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get or set transcriber variable": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get or set responder variable": {
+      "main": [
+        [
+          {
+            "node": "Message handle LLM Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio Transcription LLM Router": {
+      "main": [
+        [
+          {
+            "node": "Set prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message handle LLM Router": {
+      "main": [
+        [
+          {
+            "node": "Reply in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply in Telegram": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Reply Error in Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Get or set transcriber variable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Reply in Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Change Transcriber Command",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Transcriber Callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Set prompt": {
+      "main": [
+        [
+          {
+            "node": "Get or set responder variable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Change Transcriber Command": {
+      "main": [
+        [
+          {
+            "node": "Get Current Transcriber",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Transcriber Callback": {
+      "main": [
+        [
+          {
+            "node": "Parse Selection",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Current Transcriber": {
+      "main": [
+        [
+          {
+            "node": "Prepare Agent Menu",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Error Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Selection": {
+      "main": [
+        [
+          {
+            "node": "Set New Transcriber",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set New Transcriber": {
+      "main": [
+        [
+          {
+            "node": "Prepare Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Error Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Answer Callback Query",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Agent Menu": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "8ffa6f16-303f-41a4-8a2a-329f92319887",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-10-05T22:42:51.997Z",
+      "updatedAt": "2025-10-05T22:42:51.997Z",
+      "role": "workflow:owner",
+      "workflowId": "ZGNsRjcEZ1EIrnoC",
+      "projectId": "6FOle8VEKAMnu05Z",
+      "project": {
+        "createdAt": "2025-09-24T03:24:51.385Z",
+        "updatedAt": "2025-09-24T03:25:40.622Z",
+        "id": "6FOle8VEKAMnu05Z",
+        "name": "Evgenii Moiseev <jedrus00@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-24T03:24:51.385Z",
+            "updatedAt": "2025-09-24T03:24:51.385Z",
+            "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+            "projectId": "6FOle8VEKAMnu05Z",
+            "user": {
+              "createdAt": "2025-09-24T03:24:50.933Z",
+              "updatedAt": "2025-10-05T20:26:56.268Z",
+              "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+              "email": "jedrus00@gmail.com",
+              "firstName": "Evgenii",
+              "lastName": "Moiseev",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-24T03:25:56.788Z",
+                "personalization_survey_n8n_version": "1.112.4",
+                "companyType": "personal",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XGZy1JaF06FfcLVB",
+                "userActivatedAt": 1759095566821,
+                "dismissedCallouts": {
+                  "preBuiltAgentsModalCallout": true
+                },
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1759366397954
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-10-04T05:05:14.645Z",
+      "updatedAt": "2025-10-04T05:05:14.645Z",
+      "id": "WyHNRMcl8z01WGVm",
+      "name": "telegram"
+    }
+  ]
+}
