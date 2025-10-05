@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-25T04:41:53.148Z",
-  "updatedAt": "2025-10-04T23:23:40.681Z",
+  "updatedAt": "2025-10-05T22:24:54.604Z",
   "id": "XGZy1JaF06FfcLVB",
   "name": "Telegram AI Assistant: message handle",
   "active": true,
@@ -305,7 +305,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "ai_agent": "={{ $('Get or set responder variable').item.json.value }}",
-            "prompt": "=You are an AI assistant bot in Telegram. Answer to this prompt: \"{{ $('Set prompt').item.json.prompt }}\" make a response a Telegram compatible for rendering."
+            "prompt": "=You are an AI assistant bot in Telegram. Answer to this prompt: \"{{ $('Set prompt').item.json.prompt }}\". Make sure your answer is consie enough."
           },
           "matchingColumns": [],
           "schema": [
@@ -871,6 +871,35 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('On telegram message').first().json.message.chat.id }}",
+        "text": "=Thinking, please wait ",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('On telegram message').first().json.message.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        512,
+        -240
+      ],
+      "id": "0c8cbc96-2cf5-4232-85b0-e239b4fa4978",
+      "name": "Reply in Telegram1",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueErrorOutput"
     }
   ],
   "connections": {
@@ -1008,6 +1037,11 @@
         [
           {
             "node": "Get or set transcriber variable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Reply in Telegram1",
             "type": "main",
             "index": 0
           }
@@ -1176,7 +1210,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "76fe5a07-daa2-4a47-be77-44e1f97f8e1f",
+  "versionId": "f2f39836-2092-45c8-91f4-f0149cfd1f79",
   "triggerCount": 1,
   "shared": [
     {
