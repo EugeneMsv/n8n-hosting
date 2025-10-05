@@ -14,14 +14,36 @@ services:
       - POSTGRES_DB
       - POSTGRES_NON_ROOT_USER
       - POSTGRES_NON_ROOT_PASSWORD
+      - POSTGRES_N8N_EXECUTION_DB
+      - POSTGRES_N8N_EXECUTION_FLYWAY_USER
+      - POSTGRES_N8N_EXECUTION_FLYWAY_PASSWORD
     volumes:
       - db_storage:/var/lib/postgresql/data
       - ./postgresConfig/init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+      - ./postgresConfig/n8n_execution_schema.sql:/n8n_execution_schema.sql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - n8n-network
+
+  flyway:
+    image: flyway/flyway:latest
+    command: -connectRetries=60 -baselineOnMigrate=true migrate
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://postgres:5432/${POSTGRES_N8N_EXECUTION_DB}
+      - FLYWAY_USER=${POSTGRES_N8N_EXECUTION_FLYWAY_USER}
+      - FLYWAY_PASSWORD=${POSTGRES_N8N_EXECUTION_FLYWAY_PASSWORD}
+      - FLYWAY_PLACEHOLDERS_POSTGRES_N8N_EXECUTION_USER=${POSTGRES_N8N_EXECUTION_USER}
+      - FLYWAY_PLACEHOLDERS_POSTGRES_N8N_EXECUTION_PASSWORD=${POSTGRES_N8N_EXECUTION_PASSWORD}
+      - FLYWAY_PLACEHOLDERS_POSTGRES_N8N_EXECUTION_DB=${POSTGRES_N8N_EXECUTION_DB}
+    volumes:
+      - ./postgresConfig/flyway/sql:/flyway/sql
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - n8n-network
 
@@ -35,11 +57,13 @@ services:
       - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
       - DB_POSTGRESDB_USER=${POSTGRES_NON_ROOT_USER}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
+      - N8N_PROXY_HOPS=1
       - WEBHOOK_URL=https://n8n.emoiseev.work
       - N8N_HOST=n8n.emoiseev.work
       - N8N_PROTOCOL=https
       - N8N_PORT=5678
       - N8N_EDITOR_BASE_URL=https://n8n.emoiseev.work
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
     ports:
       - 5678:5678
     links:
@@ -50,6 +74,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     networks:
       - n8n-network
 

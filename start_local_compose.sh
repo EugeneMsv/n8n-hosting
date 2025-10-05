@@ -16,6 +16,7 @@ docker compose -f docker-compose.yml  pull --ignore-pull-failures
 
 ## Start mysql
 docker compose -f docker-compose.yml -p n8n-platform up -d
+#docker compose -f docker-compose.yml -p n8n-platform up
 
 # To enable logs:
 docker compose -p n8n-platform logs -f -t
