@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-05T22:42:51.997Z",
-  "updatedAt": "2025-10-05T22:50:13.515Z",
+  "updatedAt": "2025-10-07T01:57:34.694Z",
   "id": "ZGNsRjcEZ1EIrnoC",
   "name": "Telegram AI Assistant: message handle v2",
   "active": true,
@@ -90,7 +90,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n  \"workflow_id\": \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n  \"user_id\": \"{{ $json.message?.from?.id || $json.callback_query?.from?.id }}\",\n  \"chat_id\": \"{{ $json.message?.chat?.id || $json.callback_query?.message?.chat?.id }}\",\n  \"message_id\": \"{{ $json.message?.message_id || $json.callback_query?.message?.message_id }}\",\n  \"message_text\": \"{{ $json.message?.text }}\",\n  \"message_type\": \"{{ $json.message?.voice ? 'voice' : ($json.message?.text ?\n  'text' : ($json.callback_query ? 'callback' : 'unknown')) }}\",\n  \"voice_file_id\": \"{{ $json.message?.voice?.file_id }}\",\n  \"callback_query_id\": \"{{ $json.callback_query?.id }}\",\n  \"callback_query_data\": \"{{ $json.callback_query?.data }}\"\n}\n ",
+        "jsonOutput": "={\n  \"workflow_id\": \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n  \"user_id\": \"{{ $json.message?.from?.id || $json.callback_query?.from?.id }}\",\n  \"chat_id\": \"{{ $json.message?.chat?.id || $json.callback_query?.message?.chat?.id }}\",\n  \"message_id\": \"{{ $json.message?.message_id || $json.callback_query?.message?.message_id }}\",\n  \"message_text\": \"{{ $json.message?.text }}\",\n  \"message_type\": \"{{   $json.message?.voice ? 'voice' :\n  $json.message?.text?.startsWith('/') ? 'command' :\n  $json.message?.text ? 'text' :\n  $json.callback_query ? 'callback' :\n  'unknown'}}\",\n  \"voice_file_id\": \"{{ $json.message?.voice?.file_id }}\",\n  \"callback_query_id\": \"{{ $json.callback_query?.id }}\",\n  \"callback_query_data\": \"{{ $json.callback_query?.data }}\"\n}\n ",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -451,6 +451,31 @@
               },
               "renameOutput": true,
               "outputKey": "callback"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bcfeff9d-c50d-4545-808d-80be698fa63e",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "command",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "command"
             }
           ]
         },
@@ -485,72 +510,6 @@
       ],
       "id": "22484dd9-38a9-4542-a06b-bfafb7a6d194",
       "name": "Set prompt"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "is-command",
-              "leftValue": "={{  $('Context').item.json.message_text }}",
-              "rightValue": "/change_transcriber",
-              "operator": {
-                "type": "string",
-                "operation": "startsWith"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        176,
-        896
-      ],
-      "id": "a4b3d258-d1c8-4b7e-86c8-4897729a19d9",
-      "name": "Is Change Transcriber Command"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "is-callback",
-              "leftValue": "={{  $('Context').item.json.callback_query_data }}",
-              "rightValue": "transcriber:",
-              "operator": {
-                "type": "string",
-                "operation": "startsWith"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        176,
-        1136
-      ],
-      "id": "84d420b1-b60f-4c20-b610-18635efa1531",
-      "name": "Is Transcriber Callback"
     },
     {
       "parameters": {
@@ -803,7 +762,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const availableAgents = [\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-flash\",\n    displayName: \"Google Gemini 2.5 Flash\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.0-flash-exp\",\n    displayName: \"Google Gemini 2.0 Flash (Experimental)\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"OpenAI\",\n    llm: \"gpt-4o\",\n    displayName: \"OpenAI GPT-4o\",\n    emoji: \"🟢\"\n  },\n  {\n    provider: \"OpenAI\",\n    llm: \"gpt-4o-mini\",\n    displayName: \"OpenAI GPT-4o Mini\",\n    emoji: \"🟢\"\n  }\n];\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `transcriber:${agent.provider}:${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Transcriber:</b> ${currentAgentDisplay}\\n\\nSelect a new transcriber:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
+        "jsCode": "const availableAgents = [\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-flash\",\n    displayName: \"Google Gemini 2.5 Flash\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-pro\",\n    displayName: \"Google Gemini 2.5 Pro\",\n    emoji: \"🔵\"\n  }\n];\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `transcriber:${agent.provider}:${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Transcriber:</b> ${currentAgentDisplay}\\n\\nSelect a new transcriber:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -853,8 +812,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        704,
-        624
+        496,
+        560
       ],
       "id": "629b2e79-2795-4aba-917a-d1c34b8931f8",
       "name": "Reply Error in Telegram1",
@@ -881,8 +840,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        0,
-        0
+        96,
+        -32
       ],
       "id": "0059d0fb-a4c5-4b8e-8464-2fe7e5516ecc",
       "name": "Reply in Telegram1",
@@ -894,6 +853,102 @@
           "name": "Telegram account"
         }
       },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Context').item.json.message.text.startsWith('/change_transcriber')  }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "1b366dd7-2dc4-4ec1-8e28-06b3d240c133"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "transcriber"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true,
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        176,
+        864
+      ],
+      "id": "249f9abc-9cb5-4ed9-9348-33c67e5f6be1",
+      "name": "Command switch",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{  $('Context').item.json.callback_query_data.startsWith('transcriber:') }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "1b366dd7-2dc4-4ec1-8e28-06b3d240c133"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "transcriber"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true,
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        192,
+        1136
+      ],
+      "id": "353b9c01-4662-4c0e-979a-70e0b4a847c7",
+      "name": "Callback switch",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
       "onError": "continueErrorOutput"
     }
   ],
@@ -1038,34 +1093,18 @@
         ],
         [
           {
-            "node": "Is Change Transcriber Command",
+            "node": "Set prompt",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Is Transcriber Callback",
+            "node": "Callback switch",
             "type": "main",
             "index": 0
           }
         ],
-        []
-      ]
-    },
-    "Set prompt": {
-      "main": [
-        [
-          {
-            "node": "Get or set responder variable",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Is Change Transcriber Command": {
-      "main": [
         [
           {
             "node": "Get Current Transcriber",
@@ -1082,18 +1121,11 @@
         ]
       ]
     },
-    "Is Transcriber Callback": {
+    "Set prompt": {
       "main": [
         [
           {
-            "node": "Parse Selection",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Reply Error in Telegram1",
+            "node": "Get or set responder variable",
             "type": "main",
             "index": 0
           }
@@ -1173,6 +1205,42 @@
           }
         ]
       ]
+    },
+    "Command switch": {
+      "main": [
+        [
+          {
+            "node": "Get Current Transcriber",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Callback switch": {
+      "main": [
+        [
+          {
+            "node": "Parse Selection",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply Error in Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1181,7 +1249,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "8ffa6f16-303f-41a4-8a2a-329f92319887",
+  "versionId": "ec670ce9-8e36-48fd-8ea6-4c9b3d39d45d",
   "triggerCount": 1,
   "shared": [
     {
@@ -1206,7 +1274,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-05T20:26:56.268Z",
+              "updatedAt": "2025-10-07T01:53:48.309Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -1234,7 +1302,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-05",
+              "lastActiveAt": "2025-10-06",
               "isPending": false
             }
           }
