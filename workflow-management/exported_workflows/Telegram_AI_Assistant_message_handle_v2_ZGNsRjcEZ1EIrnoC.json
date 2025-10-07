@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-10-05T22:42:51.997Z",
-  "updatedAt": "2025-10-07T01:57:34.694Z",
+  "updatedAt": "2025-10-07T02:28:08.899Z",
   "id": "ZGNsRjcEZ1EIrnoC",
   "name": "Telegram AI Assistant: message handle v2",
-  "active": true,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
@@ -305,7 +305,8 @@
           "mappingMode": "defineBelow",
           "value": {
             "ai_agent": "={{ $('Get or set responder variable').item.json.value }}",
-            "prompt": "=You are an AI assistant bot in Telegram. Answer to this prompt: \"{{ $('Set prompt').item.json.prompt }}\". Make sure your answer is consie enough."
+            "prompt": "=You are an AI assistant bot in Telegram. Answer to this prompt: \"{{ $('Set prompt').item.json.prompt }}\". Make sure your answer is consie enough.",
+            "session_id": "={{ $('Context').item.json.user_id }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -322,6 +323,16 @@
             {
               "id": "prompt",
               "displayName": "prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -671,7 +682,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const agentMap = {\n  \"Google:models/gemini-2.5-flash\": \"Google Gemini 2.5 Flash\",\n  \"Google:models/gemini-2.0-flash-exp\": \"Google Gemini 2.0 Flash (Experimental)\",\n  \"OpenAI:gpt-4o\": \"OpenAI GPT-4o\",\n  \"OpenAI:gpt-4o-mini\": \"OpenAI GPT-4o Mini\"\n};\n\nconst newAgent = $('Parse Selection').item.json.new_agent;\nconst key = `${newAgent.provider}:${newAgent.llm}`;\nconst displayName = agentMap[key] || `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Transcriber changed to: *${displayName}*`\n  }\n};"
+        "jsCode": "const agentMap = {\n  \"Google:models/gemini-2.5-flash\": \"Google Gemini 2.5 Flash\",\n  \"Google:models/gemini-2.5-pro\": \"Google Gemini 2.5 Pro\"\n};\n\nconst newAgent = $('Parse Selection').item.json.new_agent;\nconst key = `${newAgent.provider}:${newAgent.llm}`;\nconst displayName = agentMap[key] || `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Transcriber changed to: *${displayName}*`\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -735,7 +746,7 @@
     },
     {
       "parameters": {
-        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "chatId": "={{ $('Context').item.json.chat_id }}",
         "text": "=❌ Error: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&') }}",
         "replyMarkup": "forceReply",
         "forceReply": {},
@@ -800,13 +811,13 @@
     },
     {
       "parameters": {
-        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "chatId": "={{ $('Context').item.json.chat_id }}",
         "text": "=This operation is not yet supported",
         "replyMarkup": "forceReply",
         "forceReply": {},
         "additionalFields": {
           "parse_mode": "MarkdownV2",
-          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+          "reply_to_message_id": "={{ $('Context').item.json.message_id }}"
         }
       },
       "type": "n8n-nodes-base.telegram",
@@ -828,13 +839,13 @@
     },
     {
       "parameters": {
-        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "chatId": "={{ $('Context').item.json.chat_id }}",
         "text": "=Thinking, please wait ",
         "replyMarkup": "forceReply",
         "forceReply": {},
         "additionalFields": {
           "parse_mode": "MarkdownV2",
-          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+          "reply_to_message_id": "={{ $('Context').item.json.message_id }}"
         }
       },
       "type": "n8n-nodes-base.telegram",
@@ -1249,7 +1260,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ec670ce9-8e36-48fd-8ea6-4c9b3d39d45d",
+  "versionId": "7a804f53-0a54-4eaf-a44c-be7988dad6e1",
   "triggerCount": 1,
   "shared": [
     {

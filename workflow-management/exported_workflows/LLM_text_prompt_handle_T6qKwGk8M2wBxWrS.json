@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-28T21:29:04.986Z",
-  "updatedAt": "2025-10-04T05:03:07.263Z",
+  "updatedAt": "2025-10-07T02:28:34.997Z",
   "id": "T6qKwGk8M2wBxWrS",
   "name": "LLM: text prompt handle",
   "active": false,
@@ -90,7 +90,7 @@
       "typeVersion": 3,
       "position": [
         0,
-        -736
+        -896
       ]
     },
     {
@@ -103,6 +103,9 @@
             },
             {
               "name": "prompt"
+            },
+            {
+              "name": "session_id"
             }
           ]
         }
@@ -110,8 +113,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -592,
-        -416
+        -624,
+        -688
       ],
       "id": "b325393d-ccfc-4c9a-8d1f-ed488c345606",
       "name": "When Executed by Another Workflow",
@@ -151,46 +154,11 @@
         },
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.googleGemini",
-      "typeVersion": 1,
-      "position": [
-        272,
-        -800
-      ],
-      "id": "3ff98360-41ce-48d8-b02c-11c5c6d30fcd",
-      "name": "Message a model",
-      "retryOnFail": true,
-      "executeOnce": false,
-      "alwaysOutputData": true,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "rkVlLAzFlUDQXSQe",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "modelId": {
-          "__rl": true,
-          "value": "={{ $json.ai_agent.llm }}",
-          "mode": "id"
-        },
-        "messages": {
-          "values": [
-            {
-              "content": "={{ $json.prompt }}"
-            }
-          ]
-        },
-        "options": {}
-      },
       "type": "@n8n/n8n-nodes-langchain.anthropic",
       "typeVersion": 1,
       "position": [
         304,
-        -1040
+        -1184
       ],
       "id": "caeae6f7-f662-4d42-ba84-c59d7646ae7e",
       "name": "Message a model1",
@@ -243,7 +211,7 @@
             {
               "id": "transcript",
               "name": "prompt_response",
-              "value": "={{ $json.content.parts[0].text }}",
+              "value": "={{ $json.output }}",
               "type": "string"
             }
           ]
@@ -313,6 +281,59 @@
       "alwaysOutputData": true,
       "retryOnFail": true,
       "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        -912
+      ],
+      "id": "30eaa37d-65c1-4e73-8f10-c7a5a677f84d",
+      "name": "AI Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "={{ $json.ai_agent.llm }}",
+        "options": {
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        336,
+        -720
+      ],
+      "id": "dc0f0544-8c3c-434b-96d6-430e46b324aa",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rkVlLAzFlUDQXSQe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When Executed by Another Workflow').item.json.session_id }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        -704
+      ],
+      "id": "402b8394-e13d-4ff7-ada6-d5e90037b036",
+      "name": "Simple Memory"
     }
   ],
   "connections": {
@@ -327,7 +348,7 @@
         ],
         [
           {
-            "node": "Message a model",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -347,24 +368,6 @@
         [
           {
             "node": "LLM Router",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Stop and Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Message a model": {
-      "main": [
-        [
-          {
-            "node": "Convert Google Response",
             "type": "main",
             "index": 0
           }
@@ -449,6 +452,39 @@
           }
         ]
       ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Convert Google Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -468,12 +504,13 @@
             "provider": "Google",
             "llm": "models/gemini-2.5-flash"
           },
-          "prompt": "what's the biggest city in the world?"
+          "session_id": "test",
+          "prompt": "what I've just asked you about?"
         }
       }
     ]
   },
-  "versionId": "9f4a3a07-2a63-4082-9130-1703154380af",
+  "versionId": "fbfff466-d894-403f-bf5e-5d5899c22364",
   "triggerCount": 0,
   "shared": [
     {
