@@ -3,6 +3,7 @@ version: '3.8'
 volumes:
   db_storage:
   n8n_storage:
+  playwright-profile:
 
 services:
   postgres:
@@ -89,6 +90,21 @@ services:
         - ./cloudflared-config:/etc/cloudflared
     depends_on:
       - n8n
+    networks:
+      - n8n-network
+
+  playwright-mcp:
+    image: mcr.microsoft.com/playwright/mcp
+    container_name: playwright-mcp
+    pull_policy: always
+    stdin_open: true
+    init: true
+    ports:
+      - "8931:8931"
+    volumes:
+      - playwright-profile:/profile
+    entrypoint: [ "node" ]
+    command: [ "cli.js", "--headless", "--browser", "chromium", "--no-sandbox", "--port", "8931", "--allowed-hosts" ,"*"]
     networks:
       - n8n-network
 

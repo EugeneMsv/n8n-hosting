@@ -1,0 +1,123 @@
+{
+  "createdAt": "2025-10-07T05:02:02.468Z",
+  "updatedAt": "2025-10-08T03:21:09.468Z",
+  "id": "c09xnEAMisto3edA",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "43723e0e-e2ff-4842-afe8-6497a4b79b8e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "connectionType": "sse"
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "5d73fde6-7a83-45a4-b9ff-09674adb815d",
+      "name": "MCP Client1",
+      "credentials": {
+        "mcpClientSseApi": {
+          "id": "7ItvfSRieOPS1cpz",
+          "name": "MCP Playwright (SSE)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "MCP Client1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "e64be624-80c5-4ac3-9211-3fea512875dc",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-07T05:02:02.468Z",
+      "updatedAt": "2025-10-07T05:02:02.468Z",
+      "role": "workflow:owner",
+      "workflowId": "c09xnEAMisto3edA",
+      "projectId": "6FOle8VEKAMnu05Z",
+      "project": {
+        "createdAt": "2025-09-24T03:24:51.385Z",
+        "updatedAt": "2025-09-24T03:25:40.622Z",
+        "id": "6FOle8VEKAMnu05Z",
+        "name": "Evgenii Moiseev <jedrus00@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-24T03:24:51.385Z",
+            "updatedAt": "2025-09-24T03:24:51.385Z",
+            "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+            "projectId": "6FOle8VEKAMnu05Z",
+            "user": {
+              "createdAt": "2025-09-24T03:24:50.933Z",
+              "updatedAt": "2025-10-08T03:15:57.128Z",
+              "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+              "email": "jedrus00@gmail.com",
+              "firstName": "Evgenii",
+              "lastName": "Moiseev",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-24T03:25:56.788Z",
+                "personalization_survey_n8n_version": "1.112.4",
+                "companyType": "personal",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XGZy1JaF06FfcLVB",
+                "userActivatedAt": 1759095566821,
+                "dismissedCallouts": {
+                  "preBuiltAgentsModalCallout": true
+                },
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1759366397954
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-08",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

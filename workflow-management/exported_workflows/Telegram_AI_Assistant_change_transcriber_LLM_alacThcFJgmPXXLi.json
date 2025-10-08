@@ -584,7 +584,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-07T01:53:48.309Z",
+              "updatedAt": "2025-10-08T03:15:57.128Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -612,7 +612,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-06",
+              "lastActiveAt": "2025-10-08",
               "isPending": false
             }
           }
