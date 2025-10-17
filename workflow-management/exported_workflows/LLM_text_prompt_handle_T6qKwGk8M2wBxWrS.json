@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-28T21:29:04.986Z",
-  "updatedAt": "2025-10-08T02:03:15.116Z",
+  "updatedAt": "2025-10-17T00:19:42.357Z",
   "id": "T6qKwGk8M2wBxWrS",
   "name": "LLM: text prompt handle",
   "active": false,
@@ -30,7 +30,9 @@
                   }
                 ],
                 "combinator": "and"
-              }
+              },
+              "renameOutput": true,
+              "outputKey": "Anthropic"
             },
             {
               "conditions": {
@@ -53,7 +55,9 @@
                   }
                 ],
                 "combinator": "and"
-              }
+              },
+              "renameOutput": true,
+              "outputKey": "Google"
             },
             {
               "conditions": {
@@ -76,7 +80,34 @@
                   }
                 ],
                 "combinator": "and"
-              }
+              },
+              "renameOutput": true,
+              "outputKey": "Perplexity"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "bdbd7573-e74c-4679-a761-e9cea8ede055",
+                    "leftValue": "={{$json.ai_agent.provider}}",
+                    "rightValue": "Openrouter",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Openrouter"
             }
           ]
         },
@@ -89,7 +120,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3,
       "position": [
-        0,
+        -880,
         -896
       ]
     },
@@ -113,7 +144,7 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -624,
+        -1504,
         -688
       ],
       "id": "b325393d-ccfc-4c9a-8d1f-ed488c345606",
@@ -122,21 +153,6 @@
       "notesInFlow": false,
       "alwaysOutputData": true,
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "errorType": "errorObject",
-        "errorObject": "= {\n\"type\":\"error\",\n\"content\":\"{{$json.error}}\"\n}"
-      },
-      "type": "n8n-nodes-base.stopAndError",
-      "typeVersion": 1,
-      "position": [
-        1376,
-        -32
-      ],
-      "id": "83e91bd4-6621-4234-8735-68c4a4cb6542",
-      "name": "Stop and Error",
-      "notesInFlow": false
     },
     {
       "parameters": {
@@ -157,8 +173,8 @@
       "type": "@n8n/n8n-nodes-langchain.anthropic",
       "typeVersion": 1,
       "position": [
-        304,
-        -1184
+        512,
+        -1952
       ],
       "id": "caeae6f7-f662-4d42-ba84-c59d7646ae7e",
       "name": "Message a model1",
@@ -189,8 +205,8 @@
       "type": "n8n-nodes-base.perplexity",
       "typeVersion": 1,
       "position": [
-        304,
-        -544
+        544,
+        400
       ],
       "id": "1e52c473-1b65-4e04-af25-32a14042013c",
       "name": "Message a model2",
@@ -211,7 +227,7 @@
             {
               "id": "transcript",
               "name": "prompt_response",
-              "value": "={{ $json.output }}",
+              "value": "={{ $json.output ? $json.output : 'no response' }}",
               "type": "string"
             }
           ]
@@ -223,8 +239,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1040,
-        -816
+        1504,
+        -1440
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
@@ -249,8 +265,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1040,
-        -560
+        1792,
+        112
       ],
       "retryOnFail": true,
       "alwaysOutputData": true,
@@ -275,8 +291,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1056,
-        -1056
+        1504,
+        -1936
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
@@ -285,31 +301,34 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.prompt }}",
-        "options": {}
+        "text": "={{ $json.playwrightMcpPrompt }} \n{{ $json.prompt }}",
+        "options": {
+          "maxIterations": 25
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
         368,
-        -912
+        -1456
       ],
       "id": "30eaa37d-65c1-4e73-8f10-c7a5a677f84d",
       "name": "AI Agent",
+      "alwaysOutputData": false,
       "onError": "continueErrorOutput"
     },
     {
       "parameters": {
         "modelName": "={{ $json.ai_agent.llm }}",
         "options": {
-          "maxOutputTokens": 2048
+          "maxOutputTokens": 100000
         }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        336,
-        -720
+        256,
+        -1280
       ],
       "id": "dc0f0544-8c3c-434b-96d6-430e46b324aa",
       "name": "Google Gemini Chat Model",
@@ -323,17 +342,316 @@
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('When Executed by Another Workflow').item.json.session_id }}",
-        "contextWindowLength": 30
+        "sessionKey": "={{ $('When Executed by Another Workflow').item.json.session_id }}"
       },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        448,
-        -704
+        240,
+        -1024
       ],
       "id": "402b8394-e13d-4ff7-ada6-d5e90037b036",
       "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {
+          "timeout": 60000,
+          "maxRetries": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        -1808
+      ],
+      "id": "ea1b3909-aedb-4bc1-9fc5-d5cacab86603",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Lv5pVATUsSXwsT5H",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "error",
+              "value": "={{$json.error}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "131258d8-909a-4564-9401-0142f1402527",
+      "name": "Return error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1888,
+        640
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst contextData = $('When Executed by Another Workflow').item.json;\n  \nreturn {\n    json: {\n      ...contextData,\n      playwrightMcpPrompt: `# Browser Tools - Use ONLY for web tasks\n\nActive when user requests:\n- Navigate/interact with websites\n- Scrape data\n- Fill forms\n- Test UI\n\nOtherwise ignore. Answer normally.\n\n# Tool Mapping\n\nUser says → Tool:\n- \"go to [url]\" → browser_navigate\n- \"open [site]\" → browser_navigate\n- \"find [thing] on [site]\" → browser_navigate + browser_snapshot\n- \"click [thing]\" → browser_click (snapshot first for ref)\n- \"type [text]\" → browser_type (needs ref)\n- \"fill form\" → browser_fill_form\n- \"press enter\" → browser_press_key\n- \"wait\" → browser_wait_for\n- \"screenshot\" → browser_take_screenshot\n- \"what's on page\" → browser_snapshot\n- \"new tab\" → browser_tabs\n\n# Parameter Format - EXACT MATCH REQUIRED\n\nbrowser_snapshot\n{} (EMPTY)\n\nbrowser_navigate\n{\"url\": \"https://example.com\"}\n\nbrowser_click\n{\"element\": \"button description\", \"ref\": \"ref-from-snapshot\"}\n\nbrowser_type\n{\"element\": \"input description\", \"ref\": \"ref-from-snapshot\", \"text\": \"content\", \"submit\": false}\n\nbrowser_fill_form\n{\"fields\": [{\"name\": \"field_name\", \"type\": \"textbox\", \"ref\": \"ref-value\", \"value\": \"input\"}]}\n\nbrowser_press_key\n{\"key\": \"Enter\"}\n\nbrowser_wait_for\n{\"time\": 2} OR {\"text\": \"content\"} OR {\"textGone\": \"content\"}\n\nbrowser_tabs\n{\"action\": \"new\"} OR {\"action\": \"close\", \"index\": 0}\n\nbrowser_take_screenshot\n{\"fullPage\": true}\n\nbrowser_navigate_back\n{}\n\n# Workflow\n\n1. Navigate to URL\n2. Wait: {\"time\": 2}\n3. Snapshot: {}\n4. Use refs from snapshot\n5. Interact\n\n# Rules\n\n- Snapshot first. Get refs.\n- Wait after navigation.\n- Match JSON exactly.\n- No extra parameters.\n- Refs expire. Snapshot before each click.\n- Add https:// to URLs.`\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1168,
+        -800
+      ],
+      "id": "3f67be41-591c-40eb-bc4c-bfa73c017ec2",
+      "name": "System pormpt"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.playwrightMcpPrompt }} \n{{ $json.prompt }}",
+        "options": {
+          "maxIterations": 10
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        -576
+      ],
+      "id": "cc0f4b91-f7cc-4388-815e-7f433357873d",
+      "name": "AI Agent1",
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "prompt_response",
+              "value": "={{ $json.output ? $json.output : 'no response' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4bbd0f7a-5a65-4854-90d5-682975282ef8",
+      "name": "Convert Google Response1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1520,
+        -496
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": "=z-ai/glm-4.5-air:free",
+        "options": {
+          "maxTokens": -1,
+          "timeout": 60000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -400
+      ],
+      "id": "025d4d24-9381-4c6f-9f48-327774cafcf8",
+      "name": "OpenRouter",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MemuM6oihKmVDjEr",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "MUST: Build a tool call for playwirght first and do not call playwright.  Before each playwright tool invocation You must call this tool first with the same input as you going to call playwirght tool later.",
+        "jsCode": "return JSON.stringify({ tool: $fromAI('tool', 'selected tool by agent to execute for website navigation. Return browser_snapshot string if missing','string', 'browser_snapshot'),\n        Tool_Parameters: $fromAI('Tool_Parameters', 'parameters object for chosen tool or empty json if missing', 'json', {})\n  \n  })"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        -1008
+      ],
+      "id": "217194fe-78eb-4f70-a386-ede0df574a3f",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use MCP client when user asked to navigate/fill/click or do anything else on some website. This tool returns schema for 'MCP Playwright Execution'",
+        "connectionType": "sse"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -1024
+      ],
+      "id": "b235b0c3-5d85-4e80-8886-a9eddadde87a",
+      "name": "Playwright List tools",
+      "credentials": {
+        "mcpClientSseApi": {
+          "id": "7ItvfSRieOPS1cpz",
+          "name": "MCP Playwright (SSE)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "sse",
+        "operation": "executeTool",
+        "toolName": "={{$fromAI('tool', 'selected tool by agent to execute for website navigation. Return browser_snapshot string if missing','string', 'browser_snapshot')}}",
+        "toolParameters": "={{ $fromAI('Tool_Parameters', 'parameters object for chosen tool or empty json if missing', 'json',{}) }}"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        368,
+        -1024
+      ],
+      "id": "d5db4c29-cc0a-4a72-a88e-b3c84d108432",
+      "name": "MCP Playwright Execution",
+      "credentials": {
+        "mcpClientSseApi": {
+          "id": "7ItvfSRieOPS1cpz",
+          "name": "MCP Playwright (SSE)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "filters": {
+          "q": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search', ``, 'string') }}",
+          "receivedAfter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_After', ``, 'string') }}",
+          "receivedBefore": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_Before', ``, 'string') }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        -1008
+      ],
+      "id": "14e85419-f4ca-4983-9e7a-6809fec7ced7",
+      "name": "Read Secondary Gmail Account",
+      "webhookId": "959b9540-16b4-4867-aa6a-c8e73a8332be",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j4zZN38POKI9JuSv",
+          "name": "MSV.EUG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "error",
+              "value": "={{$json.error}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a3b8b9f-0f98-49b5-9750-436626bf06a4",
+      "name": "Return error1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        -1264
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcript",
+              "name": "error",
+              "value": "={{$json.error}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8e31226b-6345-4099-946f-464b177e09fd",
+      "name": "Return error2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1536,
+        -272
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "filters": {
+          "q": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search', ``, 'string') }}",
+          "receivedAfter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_After', ``, 'string') }}",
+          "receivedBefore": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_Before', ``, 'string') }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        -1024
+      ],
+      "id": "821b6860-b208-4838-8b37-93d20a694ce1",
+      "name": "Read Main Gmail Account",
+      "webhookId": "959b9540-16b4-4867-aa6a-c8e73a8332be",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "OVj5kwkYOiTileex",
+          "name": "Jeniusest"
+        }
+      }
     }
   ],
   "connections": {
@@ -360,6 +678,13 @@
             "index": 0
           }
         ],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ],
         []
       ]
     },
@@ -367,14 +692,14 @@
       "main": [
         [
           {
-            "node": "LLM Router",
+            "node": "System pormpt",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Stop and Error",
+            "node": "Return error",
             "type": "main",
             "index": 0
           }
@@ -392,7 +717,7 @@
         ],
         [
           {
-            "node": "Stop and Error",
+            "node": "Return error",
             "type": "main",
             "index": 0
           }
@@ -404,7 +729,7 @@
         [],
         [
           {
-            "node": "Stop and Error",
+            "node": "Return error",
             "type": "main",
             "index": 0
           }
@@ -416,7 +741,7 @@
         [],
         [
           {
-            "node": "Stop and Error",
+            "node": "Return error",
             "type": "main",
             "index": 0
           }
@@ -432,13 +757,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Stop and Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Convert Anthropic Response": {
@@ -446,7 +765,7 @@
         [],
         [
           {
-            "node": "Stop and Error",
+            "node": "Return error",
             "type": "main",
             "index": 0
           }
@@ -458,6 +777,13 @@
         [
           {
             "node": "Convert Google Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return error1",
             "type": "main",
             "index": 0
           }
@@ -482,6 +808,148 @@
             "node": "AI Agent",
             "type": "ai_memory",
             "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "System pormpt": {
+      "main": [
+        [
+          {
+            "node": "LLM Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Convert Google Response1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return error2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Google Response1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Return error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Playwright List tools": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Playwright Execution": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Secondary Gmail Account": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Main Gmail Account": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
           }
         ]
       ]
@@ -501,16 +969,16 @@
       {
         "json": {
           "ai_agent": {
-            "provider": "Google",
-            "llm": "models/gemini-2.5-flash"
+            "provider": "Openrouter",
+            "llm": "z-ai/glm-4.5-air:free"
           },
-          "session_id": "test",
-          "prompt": "what I've just asked you about?"
+          "session_id": "test3",
+          "prompt": "Call playright LIST TOOLS first to see available tools. Please navigate to the wikipedia.org/ then call browser_snapshot "
         }
       }
     ]
   },
-  "versionId": "fbfff466-d894-403f-bf5e-5d5899c22364",
+  "versionId": "8ea5ae2a-ebe2-4242-aaac-1d0c44936404",
   "triggerCount": 0,
   "shared": [
     {
@@ -535,7 +1003,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-08T03:15:57.128Z",
+              "updatedAt": "2025-10-16T23:44:32.395Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -556,14 +1024,13 @@
                   "preBuiltAgentsModalCallout": true
                 },
                 "npsSurvey": {
-                  "waitingForResponse": true,
-                  "ignoredCount": 1,
-                  "lastShownAt": 1759366397954
+                  "responded": true,
+                  "lastShownAt": 1760658269686
                 }
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-08",
+              "lastActiveAt": "2025-10-16",
               "isPending": false
             }
           }

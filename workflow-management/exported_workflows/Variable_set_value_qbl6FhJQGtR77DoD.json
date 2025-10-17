@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-02T02:25:30.762Z",
-  "updatedAt": "2025-10-04T05:04:37.766Z",
+  "updatedAt": "2025-10-11T05:02:28.418Z",
   "id": "qbl6FhJQGtR77DoD",
   "name": "Variable: set value",
   "active": false,
@@ -229,13 +229,13 @@
         "json": {
           "workflow_id": "e20c5162-0cfb-4fb5-bae6-5bc48e799791",
           "scope": "42137356",
-          "variable_name": "transcriber",
-          "value": "{\"provider\": \"OpenAI\", \"llm\": \"gpt-4o\"}"
+          "variable_name": "responder",
+          "value": "{\"provider\": \"Google\", \"llm\": \"models/gemini-2.5-pro\"}"
         }
       }
     ]
   },
-  "versionId": "9eda2577-d0f6-4dae-a93f-969d47914dcb",
+  "versionId": "0974e3e0-1930-43cd-b1aa-c6fb5f839291",
   "triggerCount": 0,
   "shared": [
     {
@@ -260,7 +260,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-08T03:15:57.128Z",
+              "updatedAt": "2025-10-16T23:44:32.395Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -281,14 +281,13 @@
                   "preBuiltAgentsModalCallout": true
                 },
                 "npsSurvey": {
-                  "waitingForResponse": true,
-                  "ignoredCount": 1,
-                  "lastShownAt": 1759366397954
+                  "responded": true,
+                  "lastShownAt": 1760658269686
                 }
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-08",
+              "lastActiveAt": "2025-10-16",
               "isPending": false
             }
           }
@@ -298,16 +297,16 @@
   ],
   "tags": [
     {
-      "createdAt": "2025-09-28T21:30:10.997Z",
-      "updatedAt": "2025-09-28T21:30:10.997Z",
-      "id": "Hk3xcD25h6h2plM2",
-      "name": "sub-workflow"
-    },
-    {
       "createdAt": "2025-10-04T05:04:29.063Z",
       "updatedAt": "2025-10-04T05:04:29.063Z",
       "id": "rdSp9czUdPFSGmue",
       "name": "variable"
+    },
+    {
+      "createdAt": "2025-09-28T21:30:10.997Z",
+      "updatedAt": "2025-09-28T21:30:10.997Z",
+      "id": "Hk3xcD25h6h2plM2",
+      "name": "sub-workflow"
     }
   ]
 }

@@ -94,7 +94,7 @@ services:
       - n8n-network
 
   playwright-mcp:
-    image: mcr.microsoft.com/playwright/mcp
+    image: mcr.microsoft.com/playwright/mcp:latest
     container_name: playwright-mcp
     pull_policy: always
     stdin_open: true
