@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-28T21:29:04.986Z",
-  "updatedAt": "2025-10-17T00:19:42.357Z",
+  "updatedAt": "2025-10-21T03:21:09.387Z",
   "id": "T6qKwGk8M2wBxWrS",
   "name": "LLM: text prompt handle",
   "active": false,
@@ -547,34 +547,6 @@
     },
     {
       "parameters": {
-        "operation": "getAll",
-        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
-        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
-        "filters": {
-          "q": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search', ``, 'string') }}",
-          "receivedAfter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_After', ``, 'string') }}",
-          "receivedBefore": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_Before', ``, 'string') }}"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmailTool",
-      "typeVersion": 2.1,
-      "position": [
-        880,
-        -1008
-      ],
-      "id": "14e85419-f4ca-4983-9e7a-6809fec7ced7",
-      "name": "Read Secondary Gmail Account",
-      "webhookId": "959b9540-16b4-4867-aa6a-c8e73a8332be",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "j4zZN38POKI9JuSv",
-          "name": "MSV.EUG"
-        }
-      }
-    },
-    {
-      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -627,31 +599,88 @@
     },
     {
       "parameters": {
-        "operation": "getAll",
-        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
-        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
-        "filters": {
-          "q": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search', ``, 'string') }}",
-          "receivedAfter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_After', ``, 'string') }}",
-          "receivedBefore": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Received_Before', ``, 'string') }}"
+        "description": "Call this tool to get many messages from secondary Gmail account. All inputs are optional. You can set any of them to null or empty",
+        "workflowId": {
+          "__rl": true,
+          "value": "uE8OdDvZyVdQloEM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uE8OdDvZyVdQloEM",
+          "cachedResultName": "Gmail Messages Secondary"
         },
-        "options": {}
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('limit', ``, 'number') }}",
+            "search": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('search', ``, 'string') }}",
+            "received_after": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('received_after', ``, 'string') }}",
+            "received_before": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('received_before', ``, 'string') }}",
+            "regex": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('regex', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "search",
+              "displayName": "search",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "received_after",
+              "displayName": "received_after",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "received_before",
+              "displayName": "received_before",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "limit",
+              "displayName": "limit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "regex",
+              "displayName": "regex",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
       },
-      "type": "n8n-nodes-base.gmailTool",
-      "typeVersion": 2.1,
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
       "position": [
         736,
         -1024
       ],
-      "id": "821b6860-b208-4838-8b37-93d20a694ce1",
-      "name": "Read Main Gmail Account",
-      "webhookId": "959b9540-16b4-4867-aa6a-c8e73a8332be",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "OVj5kwkYOiTileex",
-          "name": "Jeniusest"
-        }
-      }
+      "id": "4ece5419-b176-4e50-86b5-6f25c060a787",
+      "name": "Search emails from secondary Gmail account"
     }
   ],
   "connections": {
@@ -922,23 +951,7 @@
         ]
       ]
     },
-    "Read Secondary Gmail Account": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "ai_tool",
-            "index": 0
-          },
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read Main Gmail Account": {
+    "Search emails from secondary Gmail account": {
       "ai_tool": [
         [
           {
@@ -969,16 +982,16 @@
       {
         "json": {
           "ai_agent": {
-            "provider": "Openrouter",
-            "llm": "z-ai/glm-4.5-air:free"
+            "provider": "Google",
+            "llm": "models/gemini-2.5-flash"
           },
-          "session_id": "test3",
-          "prompt": "Call playright LIST TOOLS first to see available tools. Please navigate to the wikipedia.org/ then call browser_snapshot "
+          "session_id": "123",
+          "prompt": "You are using invalid dates format use 2025-01-01 this style. Find all emails in the secondary gmail account from sender auto-confirm@amazon.com (use it in filter) in October 2025  year. Search for specific messages which have starts with subject: \"Ordered: \". Limit to 100 emails. Do use simplify call. Once found parse them to extract all spendings in dollars and return the list of orders and corresponding prices. Also include total which is based on the sum of all spendings."
         }
       }
     ]
   },
-  "versionId": "8ea5ae2a-ebe2-4242-aaac-1d0c44936404",
+  "versionId": "abca79c5-659e-4e5e-805d-7792f4fa8878",
   "triggerCount": 0,
   "shared": [
     {
@@ -1003,7 +1016,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-16T23:44:32.395Z",
+              "updatedAt": "2025-10-21T02:19:02.125Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -1030,7 +1043,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-16",
+              "lastActiveAt": "2025-10-20",
               "isPending": false
             }
           }

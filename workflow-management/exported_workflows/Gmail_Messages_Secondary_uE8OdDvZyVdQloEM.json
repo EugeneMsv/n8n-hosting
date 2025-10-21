@@ -1,0 +1,188 @@
+{
+  "createdAt": "2025-10-21T02:19:01.822Z",
+  "updatedAt": "2025-10-21T03:30:48.455Z",
+  "id": "uE8OdDvZyVdQloEM",
+  "name": "Gmail Messages Secondary",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "search"
+            },
+            {
+              "name": "received_after"
+            },
+            {
+              "name": "received_before"
+            },
+            {
+              "name": "limit",
+              "type": "number"
+            },
+            {
+              "name": "regex"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -304,
+        -80
+      ],
+      "id": "ee62926a-6f38-4ff6-b427-2282699c151d",
+      "name": "Input"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ $('Input').first().json.limit  }}",
+        "simple": false,
+        "filters": {
+          "q": "={{ $('Input').first().json.search }}",
+          "receivedAfter": "={{ $('Input').first().json.received_after }}",
+          "receivedBefore": "={{ $('Input').first().json.received_before }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        -80
+      ],
+      "id": "ed09d565-0401-47d8-9df0-eeeeceb7315c",
+      "name": "Get many messages",
+      "webhookId": "3090af07-8bdf-4555-a282-f3706a3cfea0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j4zZN38POKI9JuSv",
+          "name": "MSV.EUG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const pattern = $('Input').first().json.regex;\nconst texts = $input.all();\n\nif (!pattern || pattern === '') {\n  return texts.map(item => ({ text: item.json.text }));\n}\n\nconst regex = new RegExp(pattern, 'g');\n\nreturn texts.map(item => {\n  const text = item.json.text;\n  return { text: text.match(regex) || [] };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        -64
+      ],
+      "id": "baa84968-7ff6-43a0-be1d-fd9f625b0d46",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "connections": {
+    "Input": {
+      "main": [
+        [
+          {
+            "node": "Get many messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many messages": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Input": [
+      {
+        "json": {
+          "search": "from: auto-confirm@amazon.com subject: Ordered",
+          "received_after": "2025-10-01",
+          "received_before": "2025-10-31",
+          "limit": 3,
+          "regex": ""
+        }
+      }
+    ]
+  },
+  "versionId": "da9789da-686a-4fde-b715-4b2d487c8564",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-21T02:19:01.822Z",
+      "updatedAt": "2025-10-21T02:19:01.822Z",
+      "role": "workflow:owner",
+      "workflowId": "uE8OdDvZyVdQloEM",
+      "projectId": "6FOle8VEKAMnu05Z",
+      "project": {
+        "createdAt": "2025-09-24T03:24:51.385Z",
+        "updatedAt": "2025-09-24T03:25:40.622Z",
+        "id": "6FOle8VEKAMnu05Z",
+        "name": "Evgenii Moiseev <jedrus00@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-24T03:24:51.385Z",
+            "updatedAt": "2025-09-24T03:24:51.385Z",
+            "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+            "projectId": "6FOle8VEKAMnu05Z",
+            "user": {
+              "createdAt": "2025-09-24T03:24:50.933Z",
+              "updatedAt": "2025-10-21T02:19:02.125Z",
+              "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+              "email": "jedrus00@gmail.com",
+              "firstName": "Evgenii",
+              "lastName": "Moiseev",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-24T03:25:56.788Z",
+                "personalization_survey_n8n_version": "1.112.4",
+                "companyType": "personal",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XGZy1JaF06FfcLVB",
+                "userActivatedAt": 1759095566821,
+                "dismissedCallouts": {
+                  "preBuiltAgentsModalCallout": true
+                },
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1760658269686
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-20",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}
