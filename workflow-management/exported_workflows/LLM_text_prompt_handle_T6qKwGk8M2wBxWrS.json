@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-28T21:29:04.986Z",
-  "updatedAt": "2025-10-21T03:21:09.387Z",
+  "updatedAt": "2025-10-23T22:58:04.189Z",
   "id": "T6qKwGk8M2wBxWrS",
   "name": "LLM: text prompt handle",
   "active": false,
@@ -605,7 +605,7 @@
           "value": "uE8OdDvZyVdQloEM",
           "mode": "list",
           "cachedResultUrl": "/workflow/uE8OdDvZyVdQloEM",
-          "cachedResultName": "Gmail Messages Secondary"
+          "cachedResultName": "Tool: Gmail Messages Secondary"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -680,7 +680,24 @@
         -1024
       ],
       "id": "4ece5419-b176-4e50-86b5-6f25c060a787",
-      "name": "Search emails from secondary Gmail account"
+      "name": "Secondary Gmail account"
+    },
+    {
+      "parameters": {
+        "includeTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Include_Current_Time', ``, 'boolean') }}",
+        "outputFieldName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_Field_Name', ``, 'string') }}",
+        "options": {
+          "timezone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Timezone', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.dateTimeTool",
+      "typeVersion": 2,
+      "position": [
+        912,
+        -1008
+      ],
+      "id": "43aa8f59-6878-4288-b28e-c325023ef443",
+      "name": "Date & Time"
     }
   ],
   "connections": {
@@ -951,7 +968,23 @@
         ]
       ]
     },
-    "Search emails from secondary Gmail account": {
+    "Secondary Gmail account": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
       "ai_tool": [
         [
           {
@@ -991,7 +1024,7 @@
       }
     ]
   },
-  "versionId": "abca79c5-659e-4e5e-805d-7792f4fa8878",
+  "versionId": "691d1c16-3628-462a-a539-e91e16b0c714",
   "triggerCount": 0,
   "shared": [
     {
@@ -1016,7 +1049,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-21T02:19:02.125Z",
+              "updatedAt": "2025-10-23T22:40:13.948Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -1043,7 +1076,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-20",
+              "lastActiveAt": "2025-10-23",
               "isPending": false
             }
           }
@@ -1053,16 +1086,16 @@
   ],
   "tags": [
     {
-      "createdAt": "2025-09-28T21:29:00.851Z",
-      "updatedAt": "2025-09-28T21:29:00.851Z",
-      "id": "veJM4joaFd2Wd7Rp",
-      "name": "LLM"
-    },
-    {
       "createdAt": "2025-09-28T21:30:10.997Z",
       "updatedAt": "2025-09-28T21:30:10.997Z",
       "id": "Hk3xcD25h6h2plM2",
       "name": "sub-workflow"
+    },
+    {
+      "createdAt": "2025-09-28T21:29:00.851Z",
+      "updatedAt": "2025-09-28T21:29:00.851Z",
+      "id": "veJM4joaFd2Wd7Rp",
+      "name": "LLM"
     }
   ]
 }

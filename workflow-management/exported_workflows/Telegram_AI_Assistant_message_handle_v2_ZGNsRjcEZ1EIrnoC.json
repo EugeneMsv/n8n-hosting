@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-05T22:42:51.997Z",
-  "updatedAt": "2025-10-13T04:44:37.086Z",
+  "updatedAt": "2025-10-23T23:06:57.291Z",
   "id": "ZGNsRjcEZ1EIrnoC",
   "name": "Telegram AI Assistant: message handle v2",
   "active": true,
@@ -349,7 +349,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Context').first().json.chat_id }}",
-        "text": "=❌ Error: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&')  }}\"",
+        "text": "=❌ Error in {{ $workflow.name }}: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&')  }}\"",
         "replyMarkup": "forceReply",
         "forceReply": {},
         "additionalFields": {
@@ -1611,7 +1611,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ab91a3a0-1d6e-4f12-a679-47e64ee2c612",
+  "versionId": "8df874c1-f499-4444-a88a-617f7aa1b713",
   "triggerCount": 1,
   "shared": [
     {
@@ -1636,7 +1636,7 @@
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-21T02:19:02.125Z",
+              "updatedAt": "2025-10-23T22:40:13.948Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -1663,7 +1663,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-20",
+              "lastActiveAt": "2025-10-23",
               "isPending": false
             }
           }
