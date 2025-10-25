@@ -1,0 +1,181 @@
+{
+  "createdAt": "2025-10-25T04:13:10.220Z",
+  "updatedAt": "2025-10-25T05:09:51.444Z",
+  "id": "hePkCKkiWkRNaUWw",
+  "name": "Tool: Gmail Remove Labels from Messages",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "messageIds"
+            },
+            {
+              "name": "label"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        -80
+      ],
+      "id": "67968f48-79f8-49c8-9cfd-4cc3ce73e104",
+      "name": "Input"
+    },
+    {
+      "parameters": {
+        "operation": "removeLabels",
+        "messageId": "={{ $json.messageId }}",
+        "labelIds": "={{ $('Input').item.json.label  }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        -80
+      ],
+      "id": "fff02597-ad8d-419c-8844-f2abe50e3233",
+      "name": "Remove label from message",
+      "webhookId": "a2180948-27e6-4a40-b511-2ead4d9f55ea",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j4zZN38POKI9JuSv",
+          "name": "MSV.EUG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return  $input.first().json.messageIds.split(',').map(item => ({ json: { messageId: item.trim() } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -80
+      ],
+      "id": "cf83e514-8bdc-4e84-b014-0486e8e41203",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "connections": {
+    "Input": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove label from message": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Remove label from message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Input": [
+      {
+        "json": {
+          "messageIds": "1,2",
+          "label": "INBOX"
+        }
+      }
+    ]
+  },
+  "versionId": "2e6ee722-a4ea-4310-b0f7-30d78e93c593",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-25T04:13:10.220Z",
+      "updatedAt": "2025-10-25T04:13:10.220Z",
+      "role": "workflow:owner",
+      "workflowId": "hePkCKkiWkRNaUWw",
+      "projectId": "6FOle8VEKAMnu05Z",
+      "project": {
+        "createdAt": "2025-09-24T03:24:51.385Z",
+        "updatedAt": "2025-09-24T03:25:40.622Z",
+        "id": "6FOle8VEKAMnu05Z",
+        "name": "Evgenii Moiseev <jedrus00@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-24T03:24:51.385Z",
+            "updatedAt": "2025-09-24T03:24:51.385Z",
+            "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+            "projectId": "6FOle8VEKAMnu05Z",
+            "user": {
+              "createdAt": "2025-09-24T03:24:50.933Z",
+              "updatedAt": "2025-10-25T05:10:24.793Z",
+              "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
+              "email": "jedrus00@gmail.com",
+              "firstName": "Evgenii",
+              "lastName": "Moiseev",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-24T03:25:56.788Z",
+                "personalization_survey_n8n_version": "1.112.4",
+                "companyType": "personal",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XGZy1JaF06FfcLVB",
+                "userActivatedAt": 1759095566821,
+                "dismissedCallouts": {
+                  "preBuiltAgentsModalCallout": true
+                },
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1760658269686
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-25",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-09-28T21:30:10.997Z",
+      "updatedAt": "2025-09-28T21:30:10.997Z",
+      "id": "Hk3xcD25h6h2plM2",
+      "name": "sub-workflow"
+    }
+  ]
+}
