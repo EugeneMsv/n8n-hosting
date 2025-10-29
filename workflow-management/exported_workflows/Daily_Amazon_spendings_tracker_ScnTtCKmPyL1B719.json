@@ -1,6 +1,6 @@
 {
-  "createdAt": "2025-10-23T22:43:13.555Z",
   "updatedAt": "2025-10-24T00:08:54.129Z",
+  "createdAt": "2025-10-23T22:43:13.555Z",
   "id": "ScnTtCKmPyL1B719",
   "name": "Daily: Amazon spendings tracker",
   "active": true,
@@ -227,14 +227,14 @@
   "triggerCount": 1,
   "shared": [
     {
-      "createdAt": "2025-10-23T22:43:13.555Z",
       "updatedAt": "2025-10-23T22:43:13.555Z",
+      "createdAt": "2025-10-23T22:43:13.555Z",
       "role": "workflow:owner",
       "workflowId": "ScnTtCKmPyL1B719",
       "projectId": "6FOle8VEKAMnu05Z",
       "project": {
-        "createdAt": "2025-09-24T03:24:51.385Z",
         "updatedAt": "2025-09-24T03:25:40.622Z",
+        "createdAt": "2025-09-24T03:24:51.385Z",
         "id": "6FOle8VEKAMnu05Z",
         "name": "Evgenii Moiseev <jedrus00@gmail.com>",
         "type": "personal",
@@ -242,13 +242,13 @@
         "description": null,
         "projectRelations": [
           {
-            "createdAt": "2025-09-24T03:24:51.385Z",
             "updatedAt": "2025-09-24T03:24:51.385Z",
+            "createdAt": "2025-09-24T03:24:51.385Z",
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
+              "updatedAt": "2025-10-29T02:19:16.401Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
-              "updatedAt": "2025-10-25T05:10:24.793Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
               "firstName": "Evgenii",
@@ -275,7 +275,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-25",
+              "lastActiveAt": "2025-10-29",
               "isPending": false
             }
           }
@@ -285,8 +285,8 @@
   ],
   "tags": [
     {
-      "createdAt": "2025-10-23T22:43:32.371Z",
       "updatedAt": "2025-10-23T22:43:32.371Z",
+      "createdAt": "2025-10-23T22:43:32.371Z",
       "id": "uimN7uqjDgKsiMlL",
       "name": "main"
     }

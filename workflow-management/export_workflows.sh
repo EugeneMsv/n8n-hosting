@@ -301,7 +301,18 @@ export_workflow() {
     local is_archived
     is_archived=$(echo "$workflow_json" | jq -r '.isArchived // false')
     if [ "$is_archived" = "true" ]; then
-        print_warning "⊘ Skipped (archived): ${workflow_name} (ID: ${workflow_id})"
+        # Generate filename to check if it exists
+        local filename
+        filename=$(generate_workflow_filename "$workflow_name" "$workflow_id")
+        local filepath="${EXPORT_DIR}/${filename}"
+
+        # Delete file if it exists
+        if [ -f "$filepath" ]; then
+            rm "$filepath"
+            print_warning "🗑️ Deleted (archived): ${workflow_name} (ID: ${workflow_id})"
+        else
+            print_warning "⊘ Skipped (archived): ${workflow_name} (ID: ${workflow_id})"
+        fi
         return 2
     fi
 
