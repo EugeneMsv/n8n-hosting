@@ -14,7 +14,7 @@ Limit: 100 emails
 
 Processing
 
-Extract order block: View or edit order[\s\S]*?Total\s*(\d+(?:\.\d{1,2})?)\s*USD
+Extract order block(use exact pattern, no changes): View or edit order[\s\S]*?Total\s*(\d+(?:\.\d{1,2})?)\s*USD
 Use DOTALL/multiline flag
 Captured block contains: item names, quantities, individual prices, and total
 Parse block for all details
