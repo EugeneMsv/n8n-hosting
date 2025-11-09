@@ -273,6 +273,7 @@
     ]
   },
   "versionId": "bf8837dc-4bcd-49a9-bb99-6e5a4b22a658",
+  "versionCounter": 1,
   "triggerCount": 0,
   "shared": [
     {
@@ -296,7 +297,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-10-29T03:38:58.813Z",
+              "updatedAt": "2025-11-09T22:06:15.186Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -324,7 +325,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-29",
+              "lastActiveAt": "2025-11-09",
               "isPending": false
             }
           }

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-10-23T23:06:57.291Z",
+  "updatedAt": "2025-11-09T22:26:05.955Z",
   "createdAt": "2025-10-05T22:42:51.997Z",
   "id": "ZGNsRjcEZ1EIrnoC",
   "name": "Telegram AI Assistant: message handle v2",
@@ -20,8 +20,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2016,
-        464
+        2448,
+        448
       ],
       "id": "0518dca6-5623-4def-a2ef-35e1cde8c0e1",
       "name": "Reply in Telegram",
@@ -75,8 +75,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -896,
-        352
+        -944,
+        448
       ],
       "webhookId": "55acc711-c248-4ac9-b6cd-e295c2d33f4b",
       "alwaysOutputData": true,
@@ -223,8 +223,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        1248,
-        448
+        1680,
+        432
       ],
       "id": "ea4fb707-d3dd-4f61-be30-a1d9f3b7288c",
       "name": "Get or set responder variable",
@@ -268,8 +268,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        736,
-        80
+        768,
+        48
       ],
       "id": "586888a3-292c-4f04-94de-936a35e5f98f",
       "name": "Audio Transcription LLM Router",
@@ -336,8 +336,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        1552,
-        464
+        1984,
+        416
       ],
       "id": "5947d0a5-e3b7-4b58-bf27-9e57c115dd1b",
       "name": "Message handle LLM Router",
@@ -360,8 +360,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1920,
-        192
+        1056,
+        48
       ],
       "id": "d7d5e4aa-4b00-4fb6-807d-41c1585a2b04",
       "name": "Reply Error in Telegram",
@@ -488,7 +488,7 @@
       "typeVersion": 3.3,
       "position": [
         -352,
-        336
+        384
       ],
       "id": "3130d768-35bf-4f38-88b1-48fbc2cc1c42",
       "name": "Switch",
@@ -560,8 +560,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        688,
-        720
+        416,
+        704
       ],
       "id": "ad11c914-eb97-441f-a9fa-e5fac9d0feeb",
       "name": "Get Current Transcriber",
@@ -632,8 +632,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        752,
-        1136
+        384,
+        1552
       ],
       "id": "1c93e8e5-d445-418d-9067-56c964d66dba",
       "name": "Set New Transcriber",
@@ -649,8 +649,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1664,
-        1088
+        1024,
+        1520
       ],
       "id": "8cd4083b-4559-4eef-9baf-98fbd1f39560",
       "name": "Answer Callback Query",
@@ -676,8 +676,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1680,
-        1296
+        1024,
+        2016
       ],
       "id": "ec891233-924f-47a6-9e36-c2df65e99e87",
       "name": "Update Message",
@@ -703,8 +703,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1136,
-        1664
+        608,
+        1776
       ],
       "id": "24cff44b-6611-4b00-a82e-f296375c1c00",
       "name": "Send Error Message",
@@ -724,40 +724,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1024,
-        736
+        640,
+        704
       ],
       "id": "8de31ff4-df6b-4c9a-81a9-a45b6aeeca72",
       "name": "Prepare Agent Menu",
       "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Context').item.json.chat_id }}",
-        "text": "=This operation is not yet supported",
-        "replyMarkup": "forceReply",
-        "forceReply": {},
-        "additionalFields": {
-          "parse_mode": "MarkdownV2",
-          "reply_to_message_id": "={{ $('Context').item.json.message_id }}"
-        }
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        496,
-        560
-      ],
-      "id": "629b2e79-2795-4aba-917a-d1c34b8931f8",
-      "name": "Reply Error in Telegram1",
-      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
-      "alwaysOutputData": false,
-      "credentials": {
-        "telegramApi": {
-          "id": "KxnXKWOvz04kK93X",
-          "name": "Telegram account"
-        }
-      }
     },
     {
       "parameters": {
@@ -852,8 +824,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        176,
-        864
+        192,
+        904
       ],
       "id": "249f9abc-9cb5-4ed9-9348-33c67e5f6be1",
       "name": "Command switch",
@@ -925,8 +897,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        192,
-        1136
+        160,
+        1760
       ],
       "id": "353b9c01-4662-4c0e-979a-70e0b4a847c7",
       "name": "Callback switch",
@@ -942,7 +914,7 @@
       "typeVersion": 2,
       "position": [
         -672,
-        352
+        432
       ],
       "id": "088a3c38-59da-4a62-b720-741cd648912a",
       "name": "Context"
@@ -954,8 +926,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1008,
-        448
+        1440,
+        432
       ],
       "id": "436968ed-0d74-4e79-bc8b-0d0fad396aef",
       "name": "Set prompt"
@@ -988,8 +960,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1760,
-        448
+        2192,
+        416
       ],
       "id": "f622bd93-858d-4abf-99d6-9189a24b67b9",
       "name": "If success"
@@ -1058,8 +1030,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        656,
-        912
+        416,
+        1136
       ],
       "id": "b0fb7f6a-e938-4b49-a597-699dca1b0c29",
       "name": "Get Current Responder",
@@ -1073,8 +1045,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        992,
-        912
+        640,
+        1136
       ],
       "id": "701cc9e8-04ad-464e-8b6d-8a92f7ef409a",
       "name": "Prepare Responder Agent Menu",
@@ -1098,8 +1070,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1344,
-        848
+        864,
+        920
       ],
       "id": "6b5183e8-2631-42fc-9fb1-41c102668330",
       "name": "Send Telegram menu"
@@ -1168,8 +1140,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        752,
-        1328
+        384,
+        1984
       ],
       "id": "febded43-9fac-49b7-8db7-52a9d3f014a2",
       "name": "Set New Responder",
@@ -1183,8 +1155,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1296,
-        1376
+        608,
+        2032
       ],
       "id": "c0fd6956-56ec-4188-b442-11121a359246",
       "name": "Prepare Responder Confirmation",
@@ -1197,8 +1169,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1312,
-        1136
+        608,
+        1504
       ],
       "id": "c1213c05-d2cf-4bb4-ba61-6c8c4e4d2dcb",
       "name": "Prepare Transcriber Confirmation",
@@ -1211,12 +1183,131 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -16,
-        1152
+        -32,
+        1536
       ],
       "id": "9a5dddc8-f460-4fe4-bc0c-bf52596897d0",
       "name": "Parse Selection",
       "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').item.json.chat_id }}",
+        "text": "=❌ Error: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&') }}",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        920
+      ],
+      "id": "86733a4a-2010-409c-ac5f-a13824cf13cf",
+      "name": "Send Error Message1",
+      "webhookId": "error-webhook",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Run command",
+        "height": 640,
+        "width": 1120,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        672
+      ],
+      "typeVersion": 1,
+      "id": "82bcd2a7-aeb3-400b-927e-bd7076c8a54b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Handle selected option",
+        "height": 752,
+        "width": 1408,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -64,
+        1456
+      ],
+      "typeVersion": 1,
+      "id": "bf5945e5-ead0-476a-b5ff-62997379093c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').first().json.chat_id }}",
+        "text": "=❌ Error in {{ $workflow.name }}: {{ $json.error.replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&')  }}\"",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('Context').first().json.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2592,
+        656
+      ],
+      "id": "676212eb-c797-42b7-8b90-2783ead09aca",
+      "name": "Reply Error in Telegram1",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Transcribe audio\n",
+        "height": 416,
+        "width": 1488,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -208,
+        -48
+      ],
+      "typeVersion": 1,
+      "id": "feff4b4a-6930-4c35-b758-df7efde51575",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Process prompt\n",
+        "height": 496,
+        "width": 1600,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1312,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "8cc2b51d-adff-47f2-b0c4-565efc35c2c1",
+      "name": "Sticky Note3"
     }
   ],
   "connections": {
@@ -1278,7 +1369,7 @@
         ],
         [
           {
-            "node": "Reply Error in Telegram",
+            "node": "Reply Error in Telegram1",
             "type": "main",
             "index": 0
           }
@@ -1326,7 +1417,7 @@
         [],
         [
           {
-            "node": "Reply Error in Telegram",
+            "node": "Reply Error in Telegram1",
             "type": "main",
             "index": 0
           }
@@ -1368,13 +1459,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Reply Error in Telegram1",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Get Current Transcriber": {
@@ -1388,7 +1473,7 @@
         ],
         [
           {
-            "node": "Send Error Message",
+            "node": "Send Error Message1",
             "type": "main",
             "index": 0
           }
@@ -1442,7 +1527,7 @@
         ],
         [
           {
-            "node": "Reply Error in Telegram1",
+            "node": "Send Error Message1",
             "type": "main",
             "index": 0
           }
@@ -1467,7 +1552,7 @@
         ],
         [
           {
-            "node": "Reply Error in Telegram1",
+            "node": "Send Error Message",
             "type": "main",
             "index": 0
           }
@@ -1507,7 +1592,7 @@
         ],
         [
           {
-            "node": "Reply Error in Telegram",
+            "node": "Reply Error in Telegram1",
             "type": "main",
             "index": 0
           }
@@ -1525,7 +1610,7 @@
         ],
         [
           {
-            "node": "Send Error Message",
+            "node": "Send Error Message1",
             "type": "main",
             "index": 0
           }
@@ -1611,7 +1696,8 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "8df874c1-f499-4444-a88a-617f7aa1b713",
+  "versionId": "459e676c-83b6-44e0-a6c5-ab778da3024a",
+  "versionCounter": 6,
   "triggerCount": 1,
   "shared": [
     {
@@ -1635,7 +1721,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-10-29T03:38:58.813Z",
+              "updatedAt": "2025-11-09T22:06:15.186Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -1663,7 +1749,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-10-29",
+              "lastActiveAt": "2025-11-09",
               "isPending": false
             }
           }
