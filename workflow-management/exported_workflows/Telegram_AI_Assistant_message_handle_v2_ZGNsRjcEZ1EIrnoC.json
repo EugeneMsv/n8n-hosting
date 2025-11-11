@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-09T22:26:05.955Z",
+  "updatedAt": "2025-11-11T04:42:49.923Z",
   "createdAt": "2025-10-05T22:42:51.997Z",
   "id": "ZGNsRjcEZ1EIrnoC",
   "name": "Telegram AI Assistant: message handle v2",
@@ -20,8 +20,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2448,
-        448
+        2464,
+        416
       ],
       "id": "0518dca6-5623-4def-a2ef-35e1cde8c0e1",
       "name": "Reply in Telegram",
@@ -76,7 +76,7 @@
       "typeVersion": 1.2,
       "position": [
         -944,
-        448
+        432
       ],
       "webhookId": "55acc711-c248-4ac9-b6cd-e295c2d33f4b",
       "alwaysOutputData": true,
@@ -360,8 +360,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1056,
-        48
+        880,
+        224
       ],
       "id": "d7d5e4aa-4b00-4fb6-807d-41c1585a2b04",
       "name": "Reply Error in Telegram",
@@ -487,7 +487,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -352,
+        -400,
         384
       ],
       "id": "3130d768-35bf-4f38-88b1-48fbc2cc1c42",
@@ -719,7 +719,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const availableAgents = [\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-flash\",\n    displayName: \"Google Gemini 2.5 Flash\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-pro\",\n    displayName: \"Google Gemini 2.5 Pro\",\n    emoji: \"🔵\"\n  }\n];\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `transcriber#${agent.provider}#${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Transcriber:</b> ${currentAgentDisplay}\\n\\nSelect a new transcriber:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
+        "jsCode": "const availableAgents = $('Context').item.json.availableTranscribers;\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `transcriber#${agent.provider}#${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Transcriber:</b> ${currentAgentDisplay}\\n\\nSelect a new transcriber:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -730,35 +730,6 @@
       "id": "8de31ff4-df6b-4c9a-81a9-a45b6aeeca72",
       "name": "Prepare Agent Menu",
       "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Context').item.json.chat_id }}",
-        "text": "=Thinking, please wait ",
-        "replyMarkup": "forceReply",
-        "forceReply": {},
-        "additionalFields": {
-          "parse_mode": "MarkdownV2",
-          "reply_to_message_id": "={{ $('Context').item.json.message_id }}"
-        }
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        96,
-        -32
-      ],
-      "id": "0059d0fb-a4c5-4b8e-8464-2fe7e5516ecc",
-      "name": "Reply in Telegram1",
-      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
-      "alwaysOutputData": true,
-      "credentials": {
-        "telegramApi": {
-          "id": "KxnXKWOvz04kK93X",
-          "name": "Telegram account"
-        }
-      },
-      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -825,7 +796,7 @@
       "typeVersion": 3.3,
       "position": [
         192,
-        904
+        912
       ],
       "id": "249f9abc-9cb5-4ed9-9348-33c67e5f6be1",
       "name": "Command switch",
@@ -908,12 +879,12 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{\n  json: {\n    workflow_id: \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n    user_id: $json.message?.from?.id || $json.callback_query?.from?.id,\n    chat_id: $json.message?.chat?.id || $json.callback_query?.message?.chat?.id,\n    message_id: $json.message?.message_id || $json.callback_query?.message?.message_id,\n    message_text: JSON.stringify($json.message?.text),\n    message_type: $json.message?.voice ? 'voice' :\n                  $json.message?.text?.startsWith('/') ? 'command' :\n                  $json.message?.text ? 'text' :\n                  $json.callback_query ? 'callback' : 'unknown',\n    voice_file_id: $json.message?.voice?.file_id,\n    callback_query_id: $json.callback_query?.id,\n    callback_query_data: $json.callback_query?.data\n  }\n}];"
+        "jsCode": "return [{\n  json: {\n    workflow_id: \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n    user_id: $json.message?.from?.id || $json.callback_query?.from?.id,\n    chat_id: $json.message?.chat?.id || $json.callback_query?.message?.chat?.id,\n    message_id: $json.message?.message_id || $json.callback_query?.message?.message_id,\n    message_text: JSON.stringify($json.message?.text),\n  \n    message_type: $json.message?.voice ? 'voice' :\n                  $json.message?.text?.startsWith('/') ? 'command' :\n                  $json.message?.text ? 'text' :\n                  $json.callback_query ? 'callback' : 'unknown',\n    \n    voice_file_id: $json.message?.voice?.file_id,\n    callback_query_id: $json.callback_query?.id,\n    callback_query_data: $json.callback_query?.data,\n    availableTranscribers: [\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-flash\",\n        displayName: \"Google Gemini 2.5 Flash\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-pro\",\n        displayName: \"Google Gemini 2.5 Pro\",\n        emoji: \"🔵\"\n      }\n    ],\n    availableResponders : [\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-flash\",\n        displayName: \"Google Gemini 2.5 Flash\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-pro\",\n        displayName: \"Google Gemini 2.5 Pro\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Openrouter\",\n        llm: \"z-ai/glm-4.5-air:free\",\n        displayName: \"Openrouter GLM-4.5-air free\",\n        emoji: \"🔵\"\n      }\n    ]\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -672,
+        -624,
         432
       ],
       "id": "088a3c38-59da-4a62-b720-741cd648912a",
@@ -1040,7 +1011,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const availableAgents = [\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-flash\",\n    displayName: \"Google Gemini 2.5 Flash\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"Google\",\n    llm: \"models/gemini-2.5-pro\",\n    displayName: \"Google Gemini 2.5 Pro\",\n    emoji: \"🔵\"\n  },\n  {\n    provider: \"Openrouter\",\n    llm: \"z-ai/glm-4.5-air:free\",\n    displayName: \"Openrouter GLM-4.5-air free\",\n    emoji: \"🔵\"\n  }\n];\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `responder#${agent.provider}#${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Responder:</b> ${currentAgentDisplay}\\n\\nSelect a new responder:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
+        "jsCode": "const availableAgents = $('Context').item.json.availableResponders;\n\n\nconst currentAgent = $input.item.json.value;\nconst contextData = $input.first().json;\n\n// Find current agent display name\nconst currentAgentDisplay = availableAgents.find(\n  a => a.provider === currentAgent.provider && a.llm === currentAgent.llm\n)?.displayName || 'Unknown';\n\n// Create inline keyboard - array of rows, each row is an array of buttons\nconst inlineKeyboard = availableAgents.map(agent => {\n  const isCurrentAgent = currentAgent.provider === agent.provider && currentAgent.llm === agent.llm;\n  const buttonText = isCurrentAgent ? `${agent.emoji} ${agent.displayName} ✓` : `${agent.emoji} ${agent.displayName}`;\n  \n  return [{\n    text: buttonText,\n    callback_data: `responder#${agent.provider}#${agent.llm}`\n  }];\n});\n\nconst messageText = `<b>Current Responder:</b> ${currentAgentDisplay}\\n\\nSelect a new responder:`;\n\n// Create reply_markup as JSON string for Telegram API\nconst replyMarkup = JSON.stringify({\n  inline_keyboard: inlineKeyboard\n});\n\nreturn {\n  json: {\n    chat_id: contextData.chat_id,\n    message_id: contextData.message_id,\n    user_id: contextData.user_id,\n    workflow_id: contextData.workflow_id,\n    current_agent: currentAgent,\n    request_body:  {\n      chat_id : $('Context').first().json.chat_id,\n      text: messageText,\n      parse_mode: \"HTML\",\n      reply_markup: replyMarkup\n  }\n}\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1071,7 +1042,7 @@
       "typeVersion": 4.2,
       "position": [
         864,
-        920
+        928
       ],
       "id": "6b5183e8-2631-42fc-9fb1-41c102668330",
       "name": "Send Telegram menu"
@@ -1150,7 +1121,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const agentMap = {\n  \"Google:models/gemini-2.5-flash\": \"Google Gemini 2.5 Flash\",\n  \"Google:models/gemini-2.5-pro\": \"Google Gemini 2.5 Pro\"\n};\n\nconst newAgent = $('Parse Selection').item.json.new_agent;\nconst key = `${newAgent.provider}:${newAgent.llm}`;\nconst displayName = agentMap[key] || `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Responder changed to: *${displayName}*`\n  }\n};"
+        "jsCode": "const newAgent = $('Parse Selection').item.json.new_agent;\nconst displayName = `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Responder changed to: *${displayName}*`\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1164,7 +1135,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const agentMap = {\n  \"Google:models/gemini-2.5-flash\": \"Google Gemini 2.5 Flash\",\n  \"Google:models/gemini-2.5-pro\": \"Google Gemini 2.5 Pro\"\n};\n\nconst newAgent = $('Parse Selection').item.json.new_agent;\nconst key = `${newAgent.provider}:${newAgent.llm}`;\nconst displayName = agentMap[key] || `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Transcriber changed to: *${displayName}*`\n  }\n};"
+        "jsCode": "const newAgent = $('Parse Selection').item.json.new_agent;\nconst displayName = `${newAgent.provider} ${newAgent.llm}`;\n\nconst contextData = $('Parse Selection').item.json;\n\nreturn {\n  json: {\n    ...contextData,\n    success_message: `✅ Transcriber changed to: *${displayName}*`\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1204,7 +1175,7 @@
       "typeVersion": 1.2,
       "position": [
         640,
-        920
+        928
       ],
       "id": "86733a4a-2010-409c-ac5f-a13824cf13cf",
       "name": "Send Error Message1",
@@ -1308,6 +1279,35 @@
       "typeVersion": 1,
       "id": "8cc2b51d-adff-47f2-b0c4-565efc35c2c1",
       "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Context').item.json.chat_id }}",
+        "text": "=Thinking, please wait ",
+        "replyMarkup": "forceReply",
+        "forceReply": {},
+        "additionalFields": {
+          "parse_mode": "MarkdownV2",
+          "reply_to_message_id": "={{ $('Context').item.json.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        -32
+      ],
+      "id": "0059d0fb-a4c5-4b8e-8464-2fe7e5516ecc",
+      "name": "Notify as processing",
+      "webhookId": "b96b7a41-9806-455f-b72e-00aa638eda71",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "KxnXKWOvz04kK93X",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueErrorOutput"
     }
   ],
   "connections": {
@@ -1433,7 +1433,7 @@
             "index": 0
           },
           {
-            "node": "Reply in Telegram1",
+            "node": "Notify as processing",
             "type": "main",
             "index": 0
           }
@@ -1696,8 +1696,8 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "459e676c-83b6-44e0-a6c5-ab778da3024a",
-  "versionCounter": 6,
+  "versionId": "0438f46a-ddc9-4eee-8da6-7c9e191b8cf5",
+  "versionCounter": 18,
   "triggerCount": 1,
   "shared": [
     {
@@ -1721,7 +1721,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-09T22:06:15.186Z",
+              "updatedAt": "2025-11-11T04:41:22.788Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -1749,7 +1749,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-09",
+              "lastActiveAt": "2025-11-10",
               "isPending": false
             }
           }
@@ -1763,6 +1763,12 @@
       "createdAt": "2025-10-04T05:05:14.645Z",
       "id": "WyHNRMcl8z01WGVm",
       "name": "telegram"
+    },
+    {
+      "updatedAt": "2025-10-23T22:43:32.371Z",
+      "createdAt": "2025-10-23T22:43:32.371Z",
+      "id": "uimN7uqjDgKsiMlL",
+      "name": "main"
     }
   ]
 }
