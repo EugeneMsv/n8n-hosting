@@ -1,9 +1,10 @@
 {
-  "updatedAt": "2025-10-24T00:08:54.129Z",
+  "updatedAt": "2025-11-12T20:54:27.087Z",
   "createdAt": "2025-10-23T22:43:13.555Z",
   "id": "ScnTtCKmPyL1B719",
   "name": "Daily: Amazon spendings tracker",
-  "active": true,
+  "description": null,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
@@ -224,7 +225,7 @@
   "meta": null,
   "pinData": {},
   "versionId": "598d5e57-9abe-4f6d-b855-226e82e9fea5",
-  "versionCounter": 6,
+  "versionCounter": 8,
   "triggerCount": 1,
   "shared": [
     {
@@ -248,7 +249,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-11T04:41:22.788Z",
+              "updatedAt": "2025-11-23T20:10:09.127Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -276,7 +277,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-10",
+              "lastActiveAt": "2025-11-23",
               "isPending": false
             }
           }

@@ -7,17 +7,17 @@ Secondary Gmail account - Search and retrieve emails
 
 Search Criteria
 
-Sender: auto-confirm@amazon.com
-Subject: Starts with "Ordered: "
+Search: Sender: auto-confirm@amazon.com Subject: Starts with "Ordered: "
 Date range: First day of current month to today (format: YYYY-MM-DD)
 Limit: 100 emails
 
 Processing
 
-Extract order block(use exact pattern, no changes): View or edit order[\s\S]*?Total\s*(\d+(?:\.\d{1,2})?)\s*USD
+Extract order block(use exact regex pattern, no changes): View or edit order.*?Total.*?USD
 Use DOTALL/multiline flag
 Captured block contains: item names, quantities, individual prices, and total
-Parse block for all details
+Parse block for all details.
+Mask any adult, health related, or not safe for work words
 One total per email
 
 Return Format

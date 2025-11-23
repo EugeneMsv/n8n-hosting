@@ -1,8 +1,9 @@
 {
-  "updatedAt": "2025-10-25T05:01:50.096Z",
+  "updatedAt": "2025-11-23T21:11:56.803Z",
   "createdAt": "2025-10-21T02:19:01.822Z",
   "id": "uE8OdDvZyVdQloEM",
   "name": "Tool: Get many Gmail Messages Secondary",
+  "description": null,
   "active": false,
   "isArchived": false,
   "nodes": [
@@ -68,7 +69,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const pattern = $('Input').first().json.regex;\nconst texts = $input.all();\n\nif (!pattern || pattern === '') {\n  return texts.map(item => ({ text: item.json.text ,\n                            messageId: item.json.id,\n                            labelIds: item.json.labelIds\n                            }));\n}\n\nconst regex = new RegExp(pattern, 'g');\n\nreturn texts.map(item => {\n  const text = item.json.text;\n  return { text: text.match(regex) || [],\n          messageId: item.json.id,\n          labelIds: item.json.labelIds\n          };\n});"
+        "jsCode": "const pattern = $('Input').first().json.regex;\nconst texts = $input.all();\n\nif (!pattern || pattern === '') {\n  return texts.map(item => ({ text: item.json.text ,\n                            messageId: item.json.id,\n                            labelIds: item.json.labelIds\n                            }));\n}\n\nconst regex = new RegExp(pattern, 'gs');\n\nreturn texts.map(item => {\n  const text = item.json.text;\n  return { text: text.match(regex) || [],\n          messageId: item.json.id,\n          labelIds: item.json.labelIds\n          };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -124,8 +125,8 @@
       }
     ]
   },
-  "versionId": "629c56f9-7b47-459f-b4d9-d3dc961d44d2",
-  "versionCounter": 1,
+  "versionId": "d6b619af-5a4e-41e9-8009-fa771ec47c90",
+  "versionCounter": 2,
   "triggerCount": 0,
   "shared": [
     {
@@ -149,7 +150,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-11T04:41:22.788Z",
+              "updatedAt": "2025-11-23T20:10:09.127Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -177,7 +178,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-10",
+              "lastActiveAt": "2025-11-23",
               "isPending": false
             }
           }

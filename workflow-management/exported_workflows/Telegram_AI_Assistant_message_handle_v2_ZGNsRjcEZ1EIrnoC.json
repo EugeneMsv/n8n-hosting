@@ -1,8 +1,9 @@
 {
-  "updatedAt": "2025-11-11T04:42:49.923Z",
+  "updatedAt": "2025-11-23T21:34:46.406Z",
   "createdAt": "2025-10-05T22:42:51.997Z",
   "id": "ZGNsRjcEZ1EIrnoC",
   "name": "Telegram AI Assistant: message handle v2",
+  "description": null,
   "active": true,
   "isArchived": false,
   "nodes": [
@@ -879,7 +880,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{\n  json: {\n    workflow_id: \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n    user_id: $json.message?.from?.id || $json.callback_query?.from?.id,\n    chat_id: $json.message?.chat?.id || $json.callback_query?.message?.chat?.id,\n    message_id: $json.message?.message_id || $json.callback_query?.message?.message_id,\n    message_text: JSON.stringify($json.message?.text),\n  \n    message_type: $json.message?.voice ? 'voice' :\n                  $json.message?.text?.startsWith('/') ? 'command' :\n                  $json.message?.text ? 'text' :\n                  $json.callback_query ? 'callback' : 'unknown',\n    \n    voice_file_id: $json.message?.voice?.file_id,\n    callback_query_id: $json.callback_query?.id,\n    callback_query_data: $json.callback_query?.data,\n    availableTranscribers: [\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-flash\",\n        displayName: \"Google Gemini 2.5 Flash\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-pro\",\n        displayName: \"Google Gemini 2.5 Pro\",\n        emoji: \"🔵\"\n      }\n    ],\n    availableResponders : [\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-flash\",\n        displayName: \"Google Gemini 2.5 Flash\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-pro\",\n        displayName: \"Google Gemini 2.5 Pro\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Openrouter\",\n        llm: \"z-ai/glm-4.5-air:free\",\n        displayName: \"Openrouter GLM-4.5-air free\",\n        emoji: \"🔵\"\n      }\n    ]\n  }\n}];"
+        "jsCode": "return [{\n  json: {\n    workflow_id: \"e20c5162-0cfb-4fb5-bae6-5bc48e799791\",\n    user_id: $json.message?.from?.id || $json.callback_query?.from?.id,\n    chat_id: $json.message?.chat?.id || $json.callback_query?.message?.chat?.id,\n    message_id: $json.message?.message_id || $json.callback_query?.message?.message_id,\n    message_text: JSON.stringify($json.message?.text),\n  \n    message_type: $json.message?.voice ? 'voice' :\n                  $json.message?.text?.startsWith('/') ? 'command' :\n                  $json.message?.text ? 'text' :\n                  $json.callback_query ? 'callback' : 'unknown',\n    \n    voice_file_id: $json.message?.voice?.file_id,\n    callback_query_id: $json.callback_query?.id,\n    callback_query_data: $json.callback_query?.data,\n    availableTranscribers: [\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-flash\",\n        displayName: \"Google Gemini 2.5 Flash\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-pro\",\n        displayName: \"Google Gemini 2.5 Pro\",\n        emoji: \"🔵\"\n      }\n    ],\n    availableResponders : [\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-flash\",\n        displayName: \"Google Gemini 2.5 Flash\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-2.5-pro\",\n        displayName: \"Google Gemini 2.5 Pro\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Google\",\n        llm: \"models/gemini-3-pro-preview\",\n        displayName: \"Google Gemini 3 Pro Preview\",\n        emoji: \"🔵\"\n      },\n      {\n        provider: \"Openrouter\",\n        llm: \"x-ai/grok-4.1-fast:free\",\n        displayName: \"Openrouter Grok 4.1 free\",\n        emoji: \"🟣\"\n      },\n      {\n        provider: \"Openrouter\",\n        llm: \"z-ai/glm-4.5-air:free\",\n        displayName: \"Openrouter GLM-4.5-air free\",\n        emoji: \"🟡\"\n      }\n    ]\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1696,8 +1697,8 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "0438f46a-ddc9-4eee-8da6-7c9e191b8cf5",
-  "versionCounter": 18,
+  "versionId": "bcac414c-5757-41e1-8142-2fbed7b1a1da",
+  "versionCounter": 25,
   "triggerCount": 1,
   "shared": [
     {
@@ -1721,7 +1722,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-11T04:41:22.788Z",
+              "updatedAt": "2025-11-23T20:10:09.127Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -1749,7 +1750,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-10",
+              "lastActiveAt": "2025-11-23",
               "isPending": false
             }
           }

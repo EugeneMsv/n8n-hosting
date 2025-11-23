@@ -3,6 +3,7 @@
   "createdAt": "2025-10-01T00:49:37.017Z",
   "id": "DpbMEfVtwhwDVU9d",
   "name": "Variable: get or set default",
+  "description": null,
   "active": false,
   "isArchived": false,
   "nodes": [
@@ -418,7 +419,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-11T04:41:22.788Z",
+              "updatedAt": "2025-11-23T20:10:09.127Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -446,7 +447,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-10",
+              "lastActiveAt": "2025-11-23",
               "isPending": false
             }
           }

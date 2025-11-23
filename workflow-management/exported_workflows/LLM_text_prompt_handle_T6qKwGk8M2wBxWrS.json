@@ -1,8 +1,9 @@
 {
-  "updatedAt": "2025-11-11T04:43:48.721Z",
+  "updatedAt": "2025-11-23T20:54:56.620Z",
   "createdAt": "2025-09-28T21:29:04.986Z",
   "id": "T6qKwGk8M2wBxWrS",
   "name": "LLM: text prompt handle",
+  "description": null,
   "active": false,
   "isArchived": false,
   "nodes": [
@@ -301,7 +302,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.prompt }}",
+        "text": "={{ $json.genericPrompt }} \n{{ $json.prompt }}",
         "options": {
           "maxIterations": 25
         }
@@ -409,7 +410,7 @@
     },
     {
       "parameters": {
-        "jsCode": "\nconst contextData = $('When Executed by Another Workflow').item.json;\n  \nreturn {\n    json: {\n      ...contextData,\n      playwrightMcpPrompt: `# Browser Tools - Use ONLY for web tasks\n\nActive when user requests:\n- Navigate/interact with websites\n- Scrape data\n- Fill forms\n- Test UI\n\nOtherwise ignore. Answer normally.\n\n# Tool Mapping\n\nUser says → Tool:\n- \"go to [url]\" → browser_navigate\n- \"open [site]\" → browser_navigate\n- \"find [thing] on [site]\" → browser_navigate + browser_snapshot\n- \"click [thing]\" → browser_click (snapshot first for ref)\n- \"type [text]\" → browser_type (needs ref)\n- \"fill form\" → browser_fill_form\n- \"press enter\" → browser_press_key\n- \"wait\" → browser_wait_for\n- \"screenshot\" → browser_take_screenshot\n- \"what's on page\" → browser_snapshot\n- \"new tab\" → browser_tabs\n\n# Parameter Format - EXACT MATCH REQUIRED\n\nbrowser_snapshot\n{} (EMPTY)\n\nbrowser_navigate\n{\"url\": \"https://example.com\"}\n\nbrowser_click\n{\"element\": \"button description\", \"ref\": \"ref-from-snapshot\"}\n\nbrowser_type\n{\"element\": \"input description\", \"ref\": \"ref-from-snapshot\", \"text\": \"content\", \"submit\": false}\n\nbrowser_fill_form\n{\"fields\": [{\"name\": \"field_name\", \"type\": \"textbox\", \"ref\": \"ref-value\", \"value\": \"input\"}]}\n\nbrowser_press_key\n{\"key\": \"Enter\"}\n\nbrowser_wait_for\n{\"time\": 2} OR {\"text\": \"content\"} OR {\"textGone\": \"content\"}\n\nbrowser_tabs\n{\"action\": \"new\"} OR {\"action\": \"close\", \"index\": 0}\n\nbrowser_take_screenshot\n{\"fullPage\": true}\n\nbrowser_navigate_back\n{}\n\n# Workflow\n\n1. Navigate to URL\n2. Wait: {\"time\": 2}\n3. Snapshot: {}\n4. Use refs from snapshot\n5. Interact\n\n# Rules\n\n- Snapshot first. Get refs.\n- Wait after navigation.\n- Match JSON exactly.\n- No extra parameters.\n- Refs expire. Snapshot before each click.\n- Add https:// to URLs.`\n    }\n}"
+        "jsCode": "\nconst contextData = $('When Executed by Another Workflow').item.json;\nconst now = new Date().toLocaleString(\"en-US\", {\n  timeZone: \"America/Los_Angeles\"\n}  );\n\nreturn {\n  json: {\n    ...contextData,\n    genericPrompt: `Current date and time is: ${now}. The default timezone is PST.`\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -423,7 +424,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.playwrightMcpPrompt }} \n{{ $json.prompt }}",
+        "text": "={{ $json.genericPrompt }} \n{{ $json.prompt }}",
         "options": {
           "maxIterations": 10
         }
@@ -761,9 +762,7 @@
         },
         "blockUi": {
           "blockValues": [
-            {
-              "textContent": "Created by n8n AI agent"
-            }
+            {}
           ]
         },
         "options": {}
@@ -799,6 +798,17 @@
       ],
       "id": "43aa8f59-6878-4288-b28e-c325023ef443",
       "name": "Current date time"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        -992
+      ],
+      "id": "e374f179-f660-4651-8e9d-6329aab2ab6d",
+      "name": "Think"
     }
   ],
   "connections": {
@@ -1121,10 +1131,21 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent",
+            "node": "AI Agent1",
             "type": "ai_tool",
             "index": 0
           },
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
           {
             "node": "AI Agent1",
             "type": "ai_tool",
@@ -1157,8 +1178,8 @@
       }
     ]
   },
-  "versionId": "5ed8287d-a977-40d8-b862-712ad266baf3",
-  "versionCounter": 3,
+  "versionId": "e792440e-7f9f-473d-a955-14d62cc65303",
+  "versionCounter": 17,
   "triggerCount": 0,
   "shared": [
     {
@@ -1182,7 +1203,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-11T04:41:22.788Z",
+              "updatedAt": "2025-11-23T20:10:09.127Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -1210,7 +1231,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-10",
+              "lastActiveAt": "2025-11-23",
               "isPending": false
             }
           }
