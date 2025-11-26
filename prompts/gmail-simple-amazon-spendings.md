@@ -14,9 +14,10 @@ Limit: 100 emails
 
 Processing
 
-Extract order block(use exact pattern, no changes): Total\s*\$?(\d+(?:\.\d{1,2})?)\s*(?:USD)?
+Extract order block(use exact pattern, no changes): Total.*?USD
 Captured block contains: total per order
 Parse block for all details
+Mask any adult, health related, or not safe for work words
 One total per email
 
 Return Format
