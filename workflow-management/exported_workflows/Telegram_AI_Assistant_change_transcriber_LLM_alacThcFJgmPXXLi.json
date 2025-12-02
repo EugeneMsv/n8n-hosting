@@ -561,6 +561,7 @@
   "meta": null,
   "pinData": {},
   "versionId": "9c7e6f90-812e-4c61-adee-b84c8f246f4d",
+  "activeVersionId": null,
   "versionCounter": 1,
   "triggerCount": 1,
   "shared": [
@@ -585,7 +586,7 @@
             "userId": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
             "projectId": "6FOle8VEKAMnu05Z",
             "user": {
-              "updatedAt": "2025-11-23T20:10:09.127Z",
+              "updatedAt": "2025-12-02T03:20:34.458Z",
               "createdAt": "2025-09-24T03:24:50.933Z",
               "id": "ecdf55ab-bbff-4828-b9c0-39b049732cab",
               "email": "jedrus00@gmail.com",
@@ -613,7 +614,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-23",
+              "lastActiveAt": "2025-12-01",
               "isPending": false
             }
           }
@@ -628,5 +629,6 @@
       "id": "WyHNRMcl8z01WGVm",
       "name": "telegram"
     }
-  ]
+  ],
+  "activeVersion": null
 }
